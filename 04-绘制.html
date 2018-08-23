@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        canvas{border:1px solid #333;}
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="400" height="400"></canvas>
+<script>
+    var canvas=document.getElementById("canvas");
+    var context=canvas.getContext("2d");
+
+
+    // font 属性使用的语法与 CSS font 属性相同
+    /*
+     * font参数的值分为
+     * font-style: normal(正常), italic(斜体字), oblique(倾斜字体) 后两种在网页端一般没什么区别
+     * font-variant: normal(正常), small-caps(英文小写字母变成小的大写)
+     * font-weight: normal(正常), bold(加粗) 100-900(一般不用)
+     * font-size: 文字大小
+     * font-family: 字体样式
+     */
+    context.font='italic small-caps bold 24px Arial';
+
+
+
+    // fillStyle 默认不写是黑色填充
+    context.fillStyle="#f00";
+
+
+    // strokeStyle 默认不写是黑色填充 颜色值可以是；rgba,rgb,hsl,hsla,常用的颜色英文名，用前两者颜色标识最好（为了兼容性）。
+    context.strokeStyle="rgba(0,255,255,.6)";
+    //设置stroke拐角样式
+    context.lineJoin="round";
+    //设置stroke线条宽度 值为：大于0的数
+    context.lineWidth="10";
+
+    // 加了该属性，之后的元素均加上透明度。 0~1之间 默认1，不透明
+    context.globalAlpha=0.5;
+
+    // 写字 文字内容，起点x,起点y
+    context.fillText('单击擦除画布dfddfQWWWW',10,110);
+
+    // 描边 起点x，起点y,宽，高
+    context.strokeRect(10,10,100,100);
+    // 矩形 起点x，起点y,宽，高
+    context.fillRect(120,10,100,100);
+
+
+    // 单击清除
+    canvas.onmousedown = function () {
+      context.clearRect(0,0,canvas.width,canvas.height);
+    };
+
+</script>
+</body>
+</html>

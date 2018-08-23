@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<canvas id="canvas" width="400" height="300"></canvas>
+<script>
+    var canvas=document.getElementById("canvas");
+    var context=canvas.getContext("2d");
+    // 开始x,开始y, 结束x,结束y
+    var linearStyle=context.createLinearGradient(0,0,canvas.width,0);
+//    var linearStyle=context.createLinearGradient(0,0,0,canvas.height);
+    linearStyle.addColorStop(0,'red');
+    linearStyle.addColorStop(0.25,'yellow');
+    linearStyle.addColorStop(0.5,'blue');
+    linearStyle.addColorStop(0.75,'purple');
+    linearStyle.addColorStop(1,'green');
+
+    context.fillStyle=linearStyle;
+    context.rect(0,0,canvas.width,canvas.height);
+    context.fill();
+
+</script>
+</body>
+</html>

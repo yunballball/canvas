@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>时钟</title>
+    <style>
+        body{
+            background-color: #0033cc;
+        }
+        canvas{
+            background-color: #fff;}
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="400" height="400">
+
+</canvas>
+<script>
+    var canvas=document.getElementById("canvas");
+    var context=canvas.getContext("2d");
+
+    // 步骤：
+    // 1.画圆
+    function  drawCircle() {
+        context.beginPath();
+        context.arc(canvas.width/2,canvas.height/2,190,-Math.PI/2,Math.PI/2,false);
+        context.stroke();
+    }
+
+    drawCircle();
+
+
+</script>
+</body>
+</html>

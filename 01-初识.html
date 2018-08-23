@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            background-color:#f00;}
+        #canvas{
+            background-color: #fff;}
+    </style>
+</head>
+<body>
+<a class="down1" download="hello.txt">这是blob生成的下载！</a>
+<!--
+    默认宽高：300*150(无需带px),width,height均取非负整数，
+            注意：禁止用css来设置canvas宽高,会导致一些问题
+    默认颜色：与其父级的背景色一致
+
+-->
+<canvas id="canvas" width="400" height="400">
+    ie8以及以下不支持canvas，会显示此段文字!
+</canvas>
+
+<script>
+    // 1.获取canvas
+    // 2.用 getContext() 方法获取该canvas的绘图环境 这里面是2d，后面可能会有3d
+    // 3.使用绘图环境对象的属性 在canvas元素上绘制
+
+var canvas=document.getElementById("canvas"),
+    context = canvas.getContext("2d");
+ // 字体 字号设置
+ context.font='38pt Impact';
+  // fillText 使用 fillStyle 来填充
+ context.fillStyle='#f0f';
+  // strokeText使用 strokeStyle 来填充
+    context.strokeStyle='#007aff';
+   // 以上2个style均可以是：纯色 渐变色 图案
+    // 阴影相关 ？？？阴影可以用渐变么
+    context.shadowColor='rgba(255,0,0,.2)';
+    // 偏移量为数值，是以像素为单位，不用带单位
+    context.shadowOffsetX='10';
+    context.shadowOffsetY='10';
+    context.shadowBlur='5';
+    // 透明度
+    context.globalAlpha='0.4';
+
+
+
+
+  // 参数均为：要显示的文字，在canvas横纵坐标位置
+  // ？？？ 这里试图让文字居中，后面会有更好的方法。
+ context.fillText('hello canvas',canvas.width/2-140,canvas.height/2+15);
+ context.strokeText('hello canvas',canvas.width/2-140,canvas.height/2+15);
+
+
+  //canvas本身提供2个属性:width height
+  console.log(canvas.width);
+  console.log(canvas.height);
+  // 3个方法
+  // 1） getContext('2d') 获取绘图环境
+  // 2）toDataUrl(a,b)  返回一个数据地址（data URL）, 将当前画布的内容转为base64图片
+    // a是图片的mime类型 默认是image/png
+    // b是图片质量 0~1  小数点支持16位
+    // 返回的data URL格式:[<mediatype>][;base64],<data>
+      //  其中mediatype声明了文件类型，遵循MIME规则，如“image/png”、“text/plain”;
+      //  之后是编码类型，这里我们只涉及 base64；紧接着就是文件编码后的内容了。
+
+//  console.log(canvas.toDataURL('image/png',1));
+
+  // 3）toBlob(callback,type,q) 表示此canvas图像文件的blob
+     // callback 以一个指向blob的引用为参数，来调用该函数
+     // type 是mime类型，默认 iamge/png
+     // q 图片质量 0~1 小数点支持16位
+
+    var b=canvas.toBlob(function (blob) {
+        // 返回只读属性：type mime类型； size 文件大小
+        console.log(blob);
+     },'image/jpeg','1');
+    // ？？？如何返回blob并读出？
+    console.log(b);
+
+
+
+  // es5 中的blob
+    // blob是一个代表二进制的基本对象,blob的存在，允许我们可以直接通过js操作二进制数据，
+    // blob是存放二进制数据的容器
+
+    // 创建一个blob对象，并在文件写入 hello blob
+  var blob1=new Blob(['hello blob!!!']);
+  var a1=document.getElementsByClassName('down1')[0];
+  // ？？？ ie不支持blob？
+  a1.href=window.URL.createObjectURL(blob1);
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

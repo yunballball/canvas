@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            background-color:#0076ff;
+            margin: 0;}
+        canvas{background-color:#fff;margin:10px auto; display: block;
+        width:400px; height: 200px;
+        }
+    </style>
+    <script src="js/jquery.js"></script>
+</head>
+<body>
+<canvas id="canvas" tabindex="0"></canvas>
+
+<script>
+    var canvas=document.getElementById("canvas");
+    var info={
+
+        // 转为canvas坐标
+        toCanvasPoint: function (obj) {
+            var that=this,
+                // css 设置的 宽度
+                bbox=canvas.getBoundingClientRect();
+            // 如果canvas没变形
+           that.y=obj.y-$("#canvas").offset().top;
+           that.x=obj.x-$("#canvas").offset().left;
+
+            // 如果在css里面设置了宽高
+            that.x=that.x/(bbox.width/canvas.width);
+            that.y=that.y/(bbox.height/canvas.height);
+        }
+    };
+    // canvas 支持 onmouosedown  或者addeventListener方式
+    canvas.onmousedown= function (e) {
+        console.log('按下了！');
+    }
+    canvas.onmousemove= function (e) {
+        info.toCanvasPoint({x:e.clientX,y:e.clientY});
+        console.log('x:'+info.x+'y:'+info.y);
+    }
+
+
+    // canvas 不支持键盘事件，需要监听可以在document 或者body上
+
+
+
+
+    canvas.focus();
+    canvas.addEventListener('keydown', function (e) {
+        debugger;
+    });
+
+
+</script>
+</body>
+</html>
