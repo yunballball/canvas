@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+
+<canvas id="canvas1" width="300" height="300"></canvas>
+<!--图案元素-->
+<canvas style="display: none;" id="canvas2" width="30" height="30"></canvas>
+
+
+
+<canvas id="canvas3" width="300" height="300"></canvas>
+<canvas id="canvas4" width="200" height="200"></canvas>
+<script>
+
+    /*
+    * 用createPattern(a,r)来创建填充
+    * a 可以image,video,canvas元素
+    * r 为重复样式：repeat-x repeat-y repeat no-repeat(默认)
+    * */
+
+
+
+    // canvas2 作为图案
+    var canvas2=document.getElementById("canvas2");
+    var context2=canvas2.getContext("2d");
+    var style2=context2.createRadialGradient(canvas2.width/2,canvas2.height/2,10,canvas2.width/2,canvas2.height/2,canvas2.height/2);
+    style2.addColorStop(0,'yellow');
+    style2.addColorStop(0.5,'rgba(0,255,255,0.1)');
+    context2.fillStyle=style2;
+    context2.fillRect(0,0,canvas2.width,canvas2.height);
+
+
+    // canvas填充
+    var canvas1=document.getElementById("canvas1");
+    var context1=canvas1.getContext("2d");
+    var style1=context1.createPattern(canvas2,'repeat-y');
+    context1.fillStyle=style1;
+    context1.fillRect(0,0,canvas1.width,canvas1.height);
+
+
+   // image填充
+    var canvas3=document.getElementById("canvas3");
+    var context3=canvas3.getContext("2d");
+    var image=new Image();
+    image.src="images/35.png";
+    var style3=context1.createPattern(image,'repeat');
+    context3.fillStyle=style3;
+    context3.fillRect(0,0,canvas3.width,canvas3.height);
+
+    // 视频填充以后再来补充
+
+
+
+
+
+
+</script>
+</body>
+</html>

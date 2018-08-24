@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+
+<canvas id="canvas1" width="300" height="300"></canvas>
+<canvas id="canvas2" width="300" height="300"></canvas>
+<canvas id="canvas3" width="200" height="200"></canvas>
+<canvas id="canvas4" width="200" height="200"></canvas>
+<script>
+    var canvas1=document.getElementById("canvas1");
+    var context1=canvas1.getContext("2d");
+    // 开始圆心位置x1,y1,半径r1； 结束圆心位置x2,y2,半径r2
+    var style1=context1.createRadialGradient(canvas1.width/2,canvas1.height,10,canvas1.width/2,0,canvas1.width/2);
+    style1.addColorStop(0,'red');
+    style1.addColorStop(0.25,'#ff0');
+    style1.addColorStop(0.5,'purple');
+    style1.addColorStop(0.75,'blue');
+    style1.addColorStop(1,'green');
+
+    context1.fillStyle=style1;
+
+    context1.fillRect(0,0,canvas1.width,canvas1.height);
+
+
+    var canvas2=document.getElementById("canvas2");
+    var context2=canvas2.getContext("2d");
+
+    var style2=context2.createRadialGradient(canvas2.width/2,canvas2.height/2,10,canvas2.width/2,canvas2.height/2,canvas2.height/2);
+    style2.addColorStop(0,'yellow');
+    style2.addColorStop(0.5,'rgba(0,255,255,0.5)');
+    context2.fillStyle=style2;
+    context2.fillRect(0,0,canvas2.width,canvas2.height);
+
+
+
+
+</script>
+</body>
+</html>

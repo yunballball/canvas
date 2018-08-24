@@ -3,24 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
+    <style>
+        canvas{border:1px solid #000088;}
+    </style>
 </head>
 <body>
-<canvas id="canvas" width="400" height="300"></canvas>
+<canvas id="canvas1" width="200" height="200"></canvas>
+<canvas id="canvas2" width="200" height="200"></canvas>
+<canvas id="canvas3" width="200" height="200"></canvas>
+<canvas id="canvas4" width="200" height="200"></canvas>
 <script>
-    var canvas=document.getElementById("canvas");
-    var context=canvas.getContext("2d");
+    // 从左到右
+    var canvas1=document.getElementById("canvas1");
+    var context1=canvas1.getContext("2d");
     // 开始x,开始y, 结束x,结束y
-    var linearStyle=context.createLinearGradient(0,0,canvas.width,0);
-//    var linearStyle=context.createLinearGradient(0,0,0,canvas.height);
-    linearStyle.addColorStop(0,'red');
-    linearStyle.addColorStop(0.25,'yellow');
-    linearStyle.addColorStop(0.5,'blue');
-    linearStyle.addColorStop(0.75,'purple');
-    linearStyle.addColorStop(1,'green');
+    var linearStyle1=context1.createLinearGradient(0,0,canvas1.width,0);
+    linearStyle1.addColorStop(0,'red');
+    linearStyle1.addColorStop(0.25,'yellow');
+    linearStyle1.addColorStop(0.5,'blue');
+    linearStyle1.addColorStop(0.75,'purple');
+    linearStyle1.addColorStop(1,'green');
 
-    context.fillStyle=linearStyle;
-    context.rect(0,0,canvas.width,canvas.height);
-    context.fill();
+    context1.fillStyle=linearStyle1;
+    context1.rect(0,0,canvas1.width,canvas1.height);
+    context1.fill();
+
+    //从上到下
+    var canvas2=document.getElementById("canvas2");
+    var context2=canvas2.getContext("2d");
+
+    var linearStyle2=context2.createLinearGradient(0,0,0,canvas2.height);
+    linearStyle2.addColorStop(0,'red');
+    linearStyle2.addColorStop(0.25,'yellow');
+    linearStyle2.addColorStop(0.5,'blue');
+    linearStyle2.addColorStop(0.75,'purple');
+    linearStyle2.addColorStop(1,'green');
+    context2.fillStyle=linearStyle2;
+    context2.rect(0,0,canvas2.width,canvas2.height);
+    context2.fill();
+
+    var canvas3=document.getElementById("canvas3");
+    var context3=canvas3.getContext("2d");
+    //从左上角到右下角
+    //    var linearStyle3=context3.createLinearGradient(0,0,canvas3.width,canvas3.height);
+    //从右下角到左上角
+    var linearStyle3=context3.createLinearGradient(canvas3.width,canvas3.height,0,0);
+    linearStyle3.addColorStop(0,'red');
+    linearStyle3.addColorStop(0.25,'yellow');
+    linearStyle3.addColorStop(0.5,'blue');
+    linearStyle3.addColorStop(0.75,'purple');
+    linearStyle3.addColorStop(1,'green');
+    context3.fillStyle=linearStyle3;
+    context3.fillRect(0,0,canvas3.width,canvas3.height);
+
+
+    // 如果颜色起点 或者终点 xy,不在画布顶角，则对应补充为 addColorStop起始颜色
+    var canvas4=document.getElementById("canvas4");
+    var context4=canvas4.getContext("2d");
+
+//    var linearStyle4=context4.createLinearGradient(50,0,0,50);
+    var linearStyle4=context4.createLinearGradient(40,0,80,0);
+    linearStyle4.addColorStop(0,'red');
+    linearStyle4.addColorStop(0.25,'yellow');
+    linearStyle4.addColorStop(0.5,'blue');
+    linearStyle4.addColorStop(0.75,'black');
+    context4.fillStyle=linearStyle4;
+    context4.rect(0,0,canvas4.width,canvas4.height);
+    context4.fill();
 
 </script>
 </body>
