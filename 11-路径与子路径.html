@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        canvas{border:1px solid #333;}
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="600" height="600"></canvas>
+
+<script>
+
+    var canvas=document.getElementById("canvas");
+    var context=canvas.getContext('2d');
+    context.strokeStyle='#f00';
+
+    context.beginPath();
+    context.rect(10,10,200,200);
+    context.stroke();
+
+    // 为什么这里要写beginPath? 不写的话 路径会把之前的重绘一遍
+    context.beginPath();
+    context.rect(220,10,200,200);
+    context.stroke();
+
+
+
+
+
+</script>
+</body>
+</html>

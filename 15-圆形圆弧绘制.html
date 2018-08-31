@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="canvas" width="400" height="400"></canvas>
+
+<script>
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext('2d');
+    // 画圆
+    for(var a=0;a<4;a++){
+        context.beginPath();
+        context.arc(15+30*a,15,10,0,Math.PI*((a*0.5)+0.5),false);
+        context.stroke();
+    }
+
+    context.beginPath();
+    context.moveTo(5,65);
+    context.arc(200,200,100,Math.PI/2,Math.PI*3/2,false);
+    context.stroke();
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

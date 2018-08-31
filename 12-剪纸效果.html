@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        canvas {
+            border: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="400" height="400"></canvas>
+
+<canvas id="canvas2" width="400" height="400"></canvas>
+
+<script>
+
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext('2d');
+    context.fillStyle = '#eb415d';
+    context.shadowColor = '#0ff';
+    context.shadowOffsetX = '5';
+    context.shadowOffsetY = '5';
+    context.shadowBlur = 12;
+    context.beginPath();
+    // 画圆： 起点x,y,半径，开始弧度，结束弧度，顺时针false(默认)|逆时针true
+    context.arc(canvas.width / 2, canvas.height / 2, 180, 0, Math.PI * 2, false);
+    // 加beginPath 是为了禁止 首尾连接线，可是 剪贴效果消失了？
+    //    context.beginPath();
+
+
+    context.arc(canvas.width / 2, canvas.height / 2, 100, 0, Math.PI * 2, true);
+    context.fill();
+    context.stroke();
+
+    var util = {
+        // 顺逆时针的四边形
+        rect: function (x, y, w, h, handDirect) {
+            // 逆时针
+            if (handDirect) {
+                context2.moveTo(x, y);
+                context2.lineTo(x, y + h);
+                context2.lineTo(x + w, y + h);
+                context2.lineTo(x + w, y);
+
+            } else {
+                // 顺时针
+                context2.moveTo(x, y);
+                context2.lineTo(x + w, y);
+                context2.lineTo(x + w, y + h);
+                context2.lineTo(x, y + h);
+
+            }
+            context2.closePath();
+
+        }
+
+    };
+    var canvas2 = document.getElementById("canvas2");
+    var context2 = canvas2.getContext('2d');
+    context2.fillStyle = "#00f";
+    context2.beginPath();
+
+    // 顺时针的
+    util.rect(10, 10, 380, 380, false);
+    util.rect(20, 20, 80, 30, true);
+    context2.moveTo(200, 200);
+    context2.lineTo(100, 250);
+    context2.lineTo(350, 330);
+    context2.closePath();
+
+    context2.arc(120, 120, 50, 0, Math.PI * 2, true);
+    context2.fill();
+
+
+</script>
+</body>
+</html>

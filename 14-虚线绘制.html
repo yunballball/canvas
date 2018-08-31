@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        canvas {
+            border: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="400" height="400"></canvas>
+<canvas id="canvas2" width="400" height="400"></canvas>
+<canvas id="canvas3" width="400" height="400"></canvas>
+
+<script>
+
+
+
+
+    //虚线
+    var util={
+        /**
+         *
+         * @param x1 起点x
+         * @param y1 起点y
+         * @param dx 目标点x
+         * @param dy 目标点y
+         * @param perDashLength 每个虚线的长度 非必选，默认5
+         */
+        drawDash: function (context,x1,y1,dx,dy,perDashLength) {
+            perDashLength=perDashLength===undefined?5:perDashLength;
+            var deltaX=dx-x1;
+            var deltaY=dy-y1;
+            var numDashes=Math.floor(Math.sqrt(deltaX*deltaX+deltaY*deltaY)/perDashLength);
+            for(var k=0;k<numDashes;k++){
+                context[k%2===0?'moveTo':'lineTo'](x1+(deltaX/numDashes)*k,y1+(deltaY/numDashes)*k);
+            }
+            context.stroke();
+        }
+    };
+
+
+
+
+    // 绘制虚线
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext('2d');
+    context.save();
+
+    context.setLineDash([4,2]);
+    context.lineDashOffset = 10;
+    context.lineWidth=2;
+    context.strokeStyle="#f0f";
+    context.beginPath();
+    context.moveTo(10,10);
+    context.lineTo(100,10);
+    context.lineTo(100,100);
+    context.lineTo(10,100);
+    context.lineTo(10,10);
+    context.stroke();
+
+
+    context.restore();
+    var dashLength=canvas.width-20,
+    dashLengthBei=Math.round(dashLength/8);
+    for(var a=0;a<dashLengthBei;a++){
+        context.beginPath();
+        context.moveTo(10+(a*8),2.5);
+        if(a==dashLengthBei){
+            context.lineTo(dashLength,2.5);
+        }else{
+            context.lineTo(14+(a*8),2.5);
+        }
+        context.stroke();
+    }
+
+
+    // 绘制斜线
+    var canvas2 = document.getElementById("canvas2");
+    var context2 = canvas2.getContext('2d');
+    context2.beginPath();
+    util.drawDash(context2,20,20,200,200,6);
+
+
+    //线帽
+    var lineHatArr=['butt','round','square'];
+    context2.save();
+    for(var mm=0;mm<lineHatArr.length;mm++){
+        context2.beginPath();
+        context2.lineCap=lineHatArr[mm];
+        context2.moveTo(mm*20+10,200);
+        context2.lineTo(mm*20+10,260);
+        context2.lineWidth=5;
+        context2.strokeStyle='#09f';
+        context2.stroke();
+
+    }
+
+
+    //连接线
+
+    var lineJoinArr=['miter','round','bevel'];
+    context2.restore();
+    context2.lineWidth=15;
+    for(var z=0;z<lineJoinArr.length;z++){
+        context2.beginPath();
+        context2.lineJoin=lineJoinArr[z];
+        context2.moveTo(120+z*40,220);
+        context2.lineTo(58+z*40,280);
+        context2.lineTo(120+z*40,340);
+        context2.lineTo(80+z*40,400);
+        context2.stroke();
+    }
+
+
+
+
+    var canvas3 = document.getElementById("canvas3");
+    var ctx = canvas3.getContext("2d");
+    var offset = 0;
+    // 开始x,开始y, 结束x,结束y
+
+    function draw() {
+        ctx.clearRect(0,0, canvas.width, canvas.height);
+        ctx.setLineDash([14, 2]);
+        ctx.lineWidth=10;
+        var linearStyle1=ctx.createLinearGradient(0,0,100,0);
+        var color=(Math.floor(Math.random()*256));
+
+        linearStyle1.addColorStop(0,'rgba('+color+',0,0,255)');
+        linearStyle1.addColorStop(0.5,'blue');
+        linearStyle1.addColorStop(1,'green');
+
+
+        ctx.strokeStyle=linearStyle1;
+        ctx.lineDashOffset = -offset;
+        ctx.strokeRect(5,5, 100, 100);
+    }
+
+    function march() {
+        offset++;
+        if (offset > 16) {
+            offset = 0;
+        }
+        draw();
+        setTimeout(march, 20);
+    }
+
+    march();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

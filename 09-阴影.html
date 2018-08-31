@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+
+<canvas id="canvas" width="400" height="400"></canvas>
+<canvas id="canvas2" width="400" height="400"></canvas>
+
+
+<script>
+
+
+    var canvas=document.getElementById("canvas");
+    var context=canvas.getContext('2d');
+
+
+    /**
+     * shadowColor css3颜色
+     * shadowOffsetX 横向偏移 非0的值，
+     * shadowOffsetY 纵向偏移 非0的值，
+     * shadowBlur 阴影模糊程度
+     */
+
+    context.shadowColor='#666';
+    context.shadowOffsetX=10;
+    context.shadowOffsetY=10;
+    context.shadowBlur=5;
+    context.save(); // 保存之前的状态
+
+    context.fillStyle = "green"; //绿色
+    context.fillRect(0,0,100,100);
+
+    context.restore(); // 取最后一次save之前的状态代码
+    // 想要去除阴影效果，可以将阴影颜色设置为rgba alpha设置为0，
+//    context.shadowColor='rgba(0,0,0,0)';
+    context.fillStyle = "rgba(0,0,255,.4)";
+    context.fillRect(0,150,100,100);
+
+
+    // 内阴影
+    var canvas2=document.getElementById("canvas2");
+    var context2=canvas2.getContext('2d');
+
+    function  setEraserAttr() {
+        context2.shadowColor='rgba(0,0,255,.9)';
+        // 设置内阴影
+        context2.shadowOffsetX=-5;
+        context2.shadowOffsetY=-5;
+        context2.shadowBlur=10;
+    }
+
+    function drawEraser(loc){
+        context2.save();
+        context2.lineWidth=1;
+        setEraserAttr();
+        context2.beginPath();
+        context2.arc(loc.x,loc.y,60,0,Math.PI*2);
+        context2.closePath();
+        context2.clip();  // 2.14会学到 这里为了阴影扩散到外面
+        context2.stroke();
+        context2.restore();
+    }
+
+    canvas2.onmousedown= function (e) {
+        bbox=canvas2.getBoundingClientRect();
+        var x=bbox.left;
+        var y=bbox.top;
+        drawEraser({x: e.clientX-x,y: e.clientY-y});
+    };
+
+
+
+
+
+</script>
+</body>
+</html>

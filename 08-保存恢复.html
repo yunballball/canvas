@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+
+<canvas id="canvas" width="400" height="400"></canvas>
+
+
+<script>
+
+
+    var canvas=document.getElementById("canvas");
+    var context=canvas.getContext('2d');
+
+
+    /**
+     * save restore
+     */
+
+    context.fillStyle = "green"; //绿色
+    context.fillRect(100,100,200,200);
+    context.save();
+
+    context.fillStyle = "blue"; //蓝色
+    context.fillRect(120,120,160,160);
+    context.save();
+
+    context.fillStyle = "red";
+    context.fillRect(140,140,120,120);
+    context.save();
+
+    context.fillStyle = "yellow" // 黄色
+    context.fillRect(160,160,80,80);
+
+
+
+    context.restore(); //回到保存的上一个状态，即红色
+
+    context.fillRect(180,180,40,20); //因此此处填充的矩形是红色
+
+    context.restore(); //在往回返，回到保存的上上个状态，即蓝色
+
+    context.fillRect(0,180,40,40); //因此此处填充的矩形是蓝色的
+
+
+    context.restore(); //在往回返，绿色
+
+    context.fillRect(200,20,200,40);
+
+
+
+</script>
+</body>
+</html>
