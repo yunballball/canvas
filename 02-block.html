@@ -22,12 +22,133 @@
     // 步骤：
     // 1.画圆
     function  drawCircle() {
+        context.save();
         context.beginPath();
-        context.arc(canvas.width/2,canvas.height/2,190,-Math.PI/2,Math.PI/2,false);
+        context.arc(canvas.width/2,canvas.height/2,196,-Math.PI/2,3*Math.PI/2,false);
         context.stroke();
+        context.fillStyle='pink';
+        context.fill();
+        context.restore();
+
+    }
+    // 2.画时针
+    function drawHourDegree() {
+        //时针刻度
+        for(var i=0; i<12; i++){
+            context.save();   //设置旋转环境
+            context.lineWidth=7;
+            context.strokeStyle="#000";
+            context.lineCap='round';
+            context.translate(200,200);//设置异次元空间的原点
+            context.rotate((30*i)*Math.PI/180);//设置旋转角度
+            context.beginPath();  //画笔开始
+            context.moveTo(0,-192);   //画线， 开始
+            context.lineTo(0,-185);   //到结束
+            context.stroke();   //绘图
+            context.closePath();
+            context.restore();  //将旋转之后的元素放回原画布
+        }
+
+    }
+    // 画分针
+    function drawMinuteDegree() {
+        for(var j=0;j<60;j++){
+            context.save();
+            context.lineWidth=3;
+            context.strokeStyle="#f00";
+            context.translate(200,200);
+            context.rotate(j*6*Math.PI/180);
+            context.beginPath();
+            context.moveTo(0,-195);
+            context.lineTo(0,-188);
+            context.stroke();
+            context.restore();
+
+        }
+    }
+    // 时钟数字
+    function drawBlockText() {
+        context.save();
+        // draw numbers
+        context.translate(canvas.width / 2, canvas.height / 2);
+        context.font = '36px Arial';
+        context.fillStyle = '#09f';
+        context.textAlign = 'center';
+        context.textBaseline = 'middle';
+        for (var n = 1; n <= 12; n++) {
+            var theta = (n-3)*Math.PI/6;
+            var x = 195 * 0.8 * Math.cos(theta);
+            var y = 195 * 0.8 * Math.sin(theta);
+            context.fillText(n, x, y);
+        }
+        context.restore();
+    };
+
+    // 内部圆点
+    function centerInner() {
+        // 圆点
+        context.save();
+        context.beginPath();
+        context.arc(canvas.width/2,canvas.height/2,10,0,2*Math.PI,false);
+        context.fill();
+        context.restore();
+
+    }
+    // 分针 时针 秒针
+    function timePoint() {
+        context.clearRect(0,0,canvas.width,canvas.height);
+        var time=new Date();
+        var second=time.getSeconds();
+        var minute=time.getMinutes();
+        var hour=time.getHours()>12?time.getHours()-12:time.getHours();
+        drawCircle();
+        drawMinuteDegree();
+        drawHourDegree();
+        drawBlockText();
+        centerInner();
+        // 秒针
+        context.save();
+        context.translate(canvas.width/2,canvas.height/2);
+        context.rotate((second*6-90)*Math.PI/180);
+        context.beginPath();
+        context.moveTo(0,0);
+        context.lineTo(190,0);
+        context.stroke();
+        context.restore();
+
+        //分针
+        context.save();
+        context.translate(canvas.width/2,canvas.height/2);
+        context.rotate((minute*6-90)*Math.PI/180);
+        context.beginPath();
+        context.moveTo(0,0);
+        context.lineTo(160,0);
+        context.stroke();
+        context.restore();
+
+        //时针
+        context.save();
+        context.translate(canvas.width/2,canvas.height/2);
+        // n点*30 就是应该在的位置 -90 是因为默认的角度是横着的，所以应该 -90度，
+        // minute/2 这个相当于 根据分钟变换时针的位置  每个小时之间是30度 60分钟平分30°， 每走一分钟 是1/2°
+        context.rotate(Math.PI*(hour*30-90+minute/2)/180);
+        context.beginPath();
+        context.moveTo(0,0);
+        context.lineTo(130,0);
+        context.stroke();
+        context.restore();
     }
 
-    drawCircle();
+
+
+
+
+    var t=setInterval(function () {
+        timePoint();
+
+    },1000);
+    timePoint();
+
 
 
 </script>

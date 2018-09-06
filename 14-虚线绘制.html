@@ -124,8 +124,8 @@
 
     function draw() {
         ctx.clearRect(0,0, canvas.width, canvas.height);
-        ctx.setLineDash([14, 2]);
-        ctx.lineWidth=10;
+        ctx.setLineDash([300, 100]);
+        ctx.lineWidth=5;
         var linearStyle1=ctx.createLinearGradient(0,0,100,0);
         var color=(Math.floor(Math.random()*256));
 
@@ -135,17 +135,21 @@
 
 
         ctx.strokeStyle=linearStyle1;
-        ctx.lineDashOffset = -offset;
+        // -值是往右走
+//        ctx.lineDashOffset = -offset;
+        // 正值往左走
+        ctx.lineDashOffset = offset;
         ctx.strokeRect(5,5, 100, 100);
     }
 
     function march() {
         offset++;
-        if (offset > 16) {
+        // 这个值是 setLineDash 相加运动最平滑
+        if (offset > 400) {
             offset = 0;
         }
         draw();
-        setTimeout(march, 20);
+        setTimeout(march, 10);
     }
 
     march();

@@ -5,21 +5,40 @@
     <title>Document</title>
 </head>
 <body>
+<canvas id="canvas2" width="400" height="400"></canvas>
+
     <canvas id="canvas" width="400" height="400"></canvas>
 
 <script>
-    var canvas = document.getElementById("canvas");
-    var context = canvas.getContext('2d');
+    var canvas2 = document.getElementById("canvas2");
+    var context2 = canvas2.getContext('2d');
+
+
+
     // 画圆
     for(var a=0;a<4;a++){
-        context.beginPath();
-        context.arc(15+30*a,15,10,0,Math.PI*((a*0.5)+0.5),false);
-        context.stroke();
+        context2.beginPath();
+        context2.arc(15+30*a,15,10,0,Math.PI*((a*0.5)+0.5),false);
+        context2.stroke();
     }
 
+    context2.beginPath();
+    context2.moveTo(5,65);
+    context2.arc(200,200,100,Math.PI/2,Math.PI*3/2,false);
+    context2.stroke();
+
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext('2d');
     context.beginPath();
-    context.moveTo(5,65);
-    context.arc(200,200,100,Math.PI/2,Math.PI*3/2,false);
+    context.moveTo(200,200);
+    context.arcTo(100,150,150,50,80);
+    context.stroke();
+
+
+    context.beginPath();
+    context.moveTo(200,200);
+    context.lineTo(100,150);
+    context.lineTo(150,50);
     context.stroke();
 
 
