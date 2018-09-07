@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;}
+        canvas{ background-color:#eee;}
+
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="400" height="400"></canvas>
+
+<script>
+    var util={
+        // 圆角矩形
+
+        /**
+         *
+         * @param cxt  绘图环境
+         * @param marginLeft 距离左侧的距离
+         * @param marginTop  距离顶部的距离
+         * @param width  宽
+         * @param height 高
+         * @param radius 半径
+         */
+        radiusCircle: function (cxt,marginLeft,marginTop,width,height,radius) {
+            // 处理宽高不一致矩形 让圆角等于最小半径
+            if(width<=height){
+                if(radius>width/2){
+                    radius=width/2;
+                }
+            }else{
+                if(radius>height/2){
+                    radius=height/2;
+                }
+            }
+            cxt.beginPath();
+            cxt.moveTo(marginLeft,marginTop+radius);
+            cxt.arcTo(marginLeft,marginTop,marginLeft+width-radius,marginTop,radius);
+            cxt.arcTo(width+marginLeft,marginTop,width+marginLeft,height+marginTop-radius,radius);
+            cxt.arcTo(width+marginLeft,marginTop+height,marginLeft+radius,height+marginTop,radius);
+            cxt.arcTo(marginLeft,marginTop+height,marginLeft,height+marginTop-radius,radius);
+//    cxt.lineTo(marginLeft,marginTop+radius);
+            cxt.closePath();
+        }
+    };
+
+    var canvas=document.getElementById("canvas");
+    var cxt=canvas.getContext('2d');
+
+
+
+//    var radius= 6,width=100,height=100,marginTop=10,marginLeft=10;
+    cxt.save();
+    util.radiusCircle(cxt,10,10,80,80,10);
+
+    cxt.fillStyle='#09f';
+    cxt.fill();
+    cxt.restore();
+
+
+    util.radiusCircle(cxt,100,10,80,180,45);
+    cxt.stroke();
+
+
+    util.radiusCircle(cxt,190,10,180,100,10);
+    cxt.fillStyle='#333';
+    cxt.fill();
+
+
+
+
+</script>
+
+
+</body>
+</html>
