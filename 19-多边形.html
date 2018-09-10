@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        canvas {
+            display: block;
+            margin: 20px auto;
+            background-color: transparent;
+            border: 1px solid #333;
+        }
+    </style>
+</head>
+<script src="js/jquery.js"></script>
+<body>
+<div>
+    <input type="text" class="input" placeholder="请输入边数"/>
+    <button id="btn">确定</button>
+</div>
+
+
+<canvas id="canvas" width="400" height="400"></canvas>
+
+
+<script>
+
+    var canvas = document.getElementById("canvas");
+    var cxt = canvas.getContext("2d");
+
+    var obj = {
+        // 初始化
+        init: function () {
+            var that = this;
+            that.drawMany(that.horn);
+        },
+        horn:5,
+        centerXY:{x:canvas.width/2,y:canvas.height/2,radius:195},
+        points: [],
+        drawMany: function (many) {
+            var that=this;
+            cxt.clearRect(0, 0, canvas.width, canvas.height);
+            cxt.save();
+            cxt.beginPath();
+            cxt.arc(200, 200, 195, 0, Math.PI * 2, false);
+            cxt.strokeStyle = '#f00';
+            cxt.stroke();
+            cxt.restore();
+            var that = this, angel = 360 / many;
+            that.points = [];
+
+            //1.找到对应的点
+            for (var i = 0; i < many; i++) {
+                that.points.push([that.centerXY.x +that.centerXY.radius* Math.cos(i * angel * Math.PI / 180), that.centerXY.y + that.centerXY.radius * Math.sin(i * angel * Math.PI / 180)]);
+            }
+            //2.将点连接成线
+            cxt.beginPath();
+            cxt.moveTo(that.points[0][0], that.points[0][1]);
+            for (var k = 1; k < that.points.length; k++) {
+                cxt.lineTo(that.points[k][0], that.points[k][1]);
+            }
+            cxt.closePath();
+            cxt.stroke();
+
+        }
+    }
+
+    obj.init();
+    // 自定义多边形边数
+    $("#btn").on("click", function () {
+        obj.drawMany($(".input").val());
+    });
+
+
+</script>
+
+</body>
+</html>

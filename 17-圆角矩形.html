@@ -44,7 +44,6 @@
             cxt.arcTo(width+marginLeft,marginTop,width+marginLeft,height+marginTop-radius,radius);
             cxt.arcTo(width+marginLeft,marginTop+height,marginLeft+radius,height+marginTop,radius);
             cxt.arcTo(marginLeft,marginTop+height,marginLeft,height+marginTop-radius,radius);
-//    cxt.lineTo(marginLeft,marginTop+radius);
             cxt.closePath();
         }
     };
@@ -67,7 +66,7 @@
     cxt.stroke();
 
 
-    util.radiusCircle(cxt,190,10,180,100,10);
+    util.radiusCircle(cxt,190,10,180,100,60);
     cxt.fillStyle='#333';
     cxt.fill();
 

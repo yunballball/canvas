@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        canvas{display: block;  margin:20px auto;background-color: transparent;border:1px solid #333;}
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="400" height="400"></canvas>
+
+
+
+<script>
+
+    var canvas=document.getElementById("canvas");
+    var cxt=canvas.getContext("2d");
+
+    var obj={
+        // 初始化
+        init: function () {
+            var that=this;
+            that.drawDial();
+        },
+        // 初始化参数
+        centerX:canvas.width/2,
+        centerY:canvas.height/2,
+        radius:195,
+        // 内部线条长度
+        wireLength:4,
+        /**
+         * 外层圆
+         * @param x 中心x
+         * @param y 中心y
+         * @param r 半径
+         */
+        drawOutCircle: function (x,y,r) {
+            cxt.save();
+            cxt.shadowColor='rgba(0,0,0,.7)';
+            cxt.shadowOffsetX=3;
+            cxt.shadowOffsetY=3;
+            cxt.shadowBlur=6;
+            cxt.beginPath();
+            cxt.arc(x,y,r,0,Math.PI*2,true);
+            cxt.stroke();
+            cxt.restore();
+
+        },
+        drawInnerCircle: function (x,y,r) {
+            cxt.save();
+            cxt.beginPath();
+            cxt.strokeStyle='rgba(0,0,0,.1)';
+            cxt.arc(x,y,180,0,Math.PI*2,false);
+            cxt.closePath();
+            cxt.stroke();
+            cxt.restore();
+        },
+        /**
+         * 画内部的线
+         * @param x
+         * @param y
+         * @param r
+         */
+        drawTicks: function (x, y, r) {
+            var that=this;
+            for(var i=0;i<60;i++){
+                var width=i%5==0?that.wireLength*2.5:that.wireLength;
+                cxt.save();
+                cxt.beginPath();
+                cxt.moveTo(x+r*Math.cos(i*6*Math.PI/180),y+r*Math.sin(i*6*Math.PI/180));
+                cxt.lineTo(x+(r-width)*Math.cos(i*6*Math.PI/180),y+(r-width)*Math.sin(i*6*Math.PI/180));
+                cxt.stroke();
+                cxt.restore();
+            }
+
+        },
+        /**
+         * 内部文字
+         * @param x
+         * @param y
+         * @param r
+         */
+        drawText: function (x,y,r) {
+            for(var k=1;k<=12;k++){
+                cxt.save();
+                cxt.textAlign='center';
+                cxt.fillText(k,x+Math.cos(30*(k-3)*Math.PI/180)*(r-32),y+Math.sin(30*(k-3)*Math.PI/180)*(r-32));
+                cxt.restore();
+            }
+        },
+        // 绘画
+        drawDial: function () {
+            var that=this,
+                loc={
+                    x:that.centerX,
+                    y:that.centerY,
+                    r:that.radius
+                };
+            //外层圆
+            that.drawOutCircle(loc.x,loc.y,loc.r);
+            //内层圆
+            that.drawInnerCircle(loc.x,loc.y,loc.r);
+            //内部的线
+            that.drawTicks(loc.x,loc.y,loc.r);
+           // 内部文字
+           that.drawText(loc.x,loc.y,loc.r);
+
+        }
+
+    };
+
+
+obj.init();
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>
