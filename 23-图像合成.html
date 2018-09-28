@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        canvas {
+            border: 1px solid #333;
+        }
+
+    </style>
+</head>
+<body>
+<div>
+    <select name="" id="choose">
+        <option value="source-over">source-over（默认）</option>
+        <option value="source-atop">source-atop</option>
+        <option value="source-in">source-in</option>
+        <option value="source-out">source-out</option>
+        <option value="destination-atop">destination-atop</option>
+        <option value="destination-in">destination-in</option>
+        <option value="destination-out">destination-out</option>
+        <option value="destination-over">destination-over</option>
+        <option value="lighter">lighter</option>
+        <option value="copy">copy</option>
+        <option value="xor">xor</option>
+    </select>
+
+    <div>
+        <p>source-over:绘制的图形将画在现有画布之上 </p>
+
+        <p>destination-over:这个操作的值与前一个值相反，所以现在目标绘制在源之上</p>
+
+        <p>source-atop:这个操作会将源绘制在目标之上，但是在重叠区域上两者都是不透明的。绘制在其他位置的目标是不透明的，但源是透明的。</p>
+    </div>
+</div>
+<canvas id="canvas" width="400" height="400"></canvas>
+
+<script src="js/jquery.js"></script>
+<script>
+
+    var canvas = document.getElementById("canvas");
+    var cxt = canvas.getContext("2d");
+
+
+    var main = {
+        init: function () {
+            var that = this;
+            that.andImg($("#choose option").eq(0).val(), 100, 100);
+            this.bindEvent();
+
+        },
+        /**
+         * 转为canvas坐标
+         * @param x
+         * @param y
+         * @returns {{}}
+         */
+        toWindowXY: function (x, y) {
+            var obj = {};
+            obj.x = x - canvas.getBoundingClientRect().left;
+            obj.y = y - canvas.getBoundingClientRect().top;
+            return obj;
+        },
+        /**
+         * 图像合成
+         * @param val
+         * @param x
+         * @param y
+         */
+        andImg: function (val, x, y) {
+            cxt.clearRect(0, 0, canvas.width, canvas.height);
+            // 蓝色矩形
+            cxt.save();
+            cxt.fillStyle = '#09f';
+            cxt.fillRect(50, 50, 100, 100);
+            cxt.restore();
+
+            cxt.save();
+            cxt.globalCompositeOperation = val;
+
+            // 红色圆形
+            cxt.fillStyle = 'rgba(255,255,0,1)';
+            cxt.beginPath();
+//        cxt.fillRect(x-50,y-50,100,100);
+            cxt.arc(x, y, 50, 0, Math.PI * 2, false);
+            cxt.fill();
+            cxt.restore();
+        },
+        selectOption: '',
+        bindEvent: function () {
+            var that = this;
+            // 根据选择改变
+            $("#choose").on("change", function () {
+                that.selectOption = $(this).val();
+            });
+
+            $("#canvas").on("mousemove", function (e) {
+                var obj = that.toWindowXY(e.clientX, e.clientY);
+                that.andImg(that.selectOption, obj.x, obj.y);
+
+            });
+        }
+
+    };
+
+    main.init();
+
+
+</script>
+</body>
+</html>

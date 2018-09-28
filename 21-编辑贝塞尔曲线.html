@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{margin: 0;}
+        canvas{border:1px solid #333;}
+        .txt{position: absolute;color:red;}
+
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="400" height="400"></canvas>
+
+<script>
+
+    var canvas=document.getElementById("canvas");
+    var cxt=canvas.getContext("2d");
+    cxt.beginPath();
+
+
+
+    var endPoints=[{x:30,y:70},{x:330,y:270}];
+    var controlPoints=[{x:30,y:270},{x:330,y:70}];
+    var con=endPoints.concat(controlPoints);
+    //三次贝塞尔
+    cxt.moveTo(endPoints[0].x,endPoints[0].y);
+    cxt.bezierCurveTo(controlPoints[0].x,controlPoints[0].y,controlPoints[1].x,controlPoints[1].y,endPoints[1].x,endPoints[1].y);
+
+
+    cxt.stroke();
+
+    for(var k=0;k<con.length;k++){
+        cxt.beginPath();
+        cxt.arc(con[k].x,con[k].y,5,0,2*Math.PI,false);
+        cxt.stroke();
+
+    }
+
+    var body=document.getElementsByTagName('body')[0];
+
+    body.onmousedown= function (e) {
+        console.log(e.clientX);
+        console.log(e.clientY);
+    };
+    canvas.onmousemove= function (e) {
+        cxt.clearRect(0,0,400,400);
+        cxt.beginPath();
+
+
+        var endPoints=[{x: e.clientX,y:e.clientY},{x:330,y:270}];
+        var controlPoints=[{x:30,y:270},{x:330,y:70}];
+        var con=endPoints.concat(controlPoints);
+        //三次贝塞尔
+        cxt.moveTo(endPoints[0].x,endPoints[0].y);
+        cxt.bezierCurveTo(controlPoints[0].x,controlPoints[0].y,controlPoints[1].x,controlPoints[1].y,endPoints[1].x,endPoints[1].y);
+
+
+        cxt.stroke();
+
+        for(var k=0;k<con.length;k++){
+            cxt.beginPath();
+            cxt.arc(con[k].x,con[k].y,5,0,2*Math.PI,false);
+            cxt.stroke();
+
+        }
+
+//        console.log(e.clientX);
+//        console.log(e.clientY);
+    };
+    body.onmouseup= function (e) {
+        console.log(e.clientX);
+        console.log(e.clientY);
+        var node=document.createElement("span");
+        var textnode=document.createTextNode("Water")
+        node.className='txt';
+        node.style.top= e.clientY+'px';
+        node.style.left= e.clientX+'px';
+        node.appendChild(textnode);
+        body.appendChild(node);
+    };
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

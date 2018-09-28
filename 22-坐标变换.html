@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{margin: 0;}
+        canvas{border:1px solid #333;}
+
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="400" height="400"></canvas>
+
+<script>
+
+    var canvas=document.getElementById("canvas");
+    var cxt=canvas.getContext("2d");
+    var rWidth=200,
+        rHeight=100;
+    // 居中一个长方形 普通做法
+//    cxt.strokeRect((canvas.width-rWidth)/2,(canvas.height-rHeight)/2,rWidth,rHeight);
+
+   // 如果将画布从0,0,挪到旋转中心的位置
+    cxt.save();
+    // 平移
+    cxt.translate(canvas.width/2,canvas.height/2);
+    // 旋转（转为弧度）
+//    cxt.rotate(90*Math.PI/180);
+
+    // 缩放 和cs scale用法一致 用原图*缩放倍数 入参（-1,1）水平镜像 入参 （1,-1）垂直镜像
+    cxt.scale(1.2,1.2);
+    cxt.strokeRect(-rWidth/2,-rHeight/2,rWidth,rHeight);
+    cxt.restore();
+
+    cxt.save();
+    cxt.translate(canvas.width/2,60);
+    cxt.scale(-1.2,1.2);
+    cxt.strokeRect(-rWidth/2,-rHeight/2,rWidth,rHeight);
+
+    cxt.restore();
+
+
+    cxt.beginPath();
+    cxt.arc(canvas.width/2,canvas.height/2,5,0,2*Math.PI,false);
+    cxt.fillStyle='#f00';
+    cxt.fill();
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

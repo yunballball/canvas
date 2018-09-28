@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="`">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0; overflow: hidden;
+            background-color:#000;}
+        /*canvas{border:1px solid #ddd;}*/
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="" height=""></canvas>
+
+<script>
+    var canvas=document.getElementById("canvas");
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+    var ctx=canvas.getContext("2d");
+    ctx.beginPath();
+
+
+    ctx.lineWidth = 10;
+
+    // 默认情况下 剪辑区域大小与canvas大小一致
+    // 可以通过创建区域并调用cxt的clip()方法来指定剪辑区域
+    // 一旦设置好了剪辑区域，在canvas中绘制的所有内容都将局限在该区域内，区域外的是没有效果的。
+    // clip()方法可作用全文 所以注意使用save restore()来还原画布
+
+    var image1 = new Image();
+    image1.src = "images/2.jpg";
+    var image2 = new Image();
+    image2.src = "images/pc.jpg";
+
+    image1.onload = function () {
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(165, 250, 130, 0, Math.PI*2, false);
+        ctx.closePath();
+        ctx.clip();
+        ctx.drawImage(image1, 10, 10);
+        ctx.restore();
+
+
+    }
+    /*image2.onload= function () {
+        ctx.save();
+
+        ctx.beginPath();
+        ctx.arc(500, 650, 200, 0, Math.PI, false);
+        ctx.closePath();
+        ctx.strokeStyle = "#00f";
+        // clip() 方法之上 定义剪辑区域
+        // clip() 方法之下 是被剪辑的内容 图片或者图形皆可
+        ctx.clip();
+        // 1）图片
+//        ctx.drawImage(image2, 0, 400);
+        // 2）图形
+        ctx.fillStyle='#09f';
+        ctx.fillRect(0,400,800,400);
+
+        ctx.closePath();
+        ctx.stroke();
+
+        ctx.restore();
+    };*/
+
+    canvas.onmousemove=function (e) {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.save();
+
+        ctx.beginPath();
+
+        ctx.shadowBlur=10;
+        ctx.shadowColor='rgba(0,0,255,.8)';
+        ctx.shadowOffsetX=15;
+        ctx.shadowOffsetY=15;
+        ctx.arc(e.clientX, e.clientY, 180, 0, Math.PI*2, false);
+        ctx.closePath();
+        ctx.clip();
+        ctx.drawImage(image1,0,0);
+
+        ctx.restore();
+    }
+
+</script>
+
+
+</body>
+</html>
+
+

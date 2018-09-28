@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;}
+        canvas{border:1px solid #333;}
+    </style>
+</head>
+<body>
+
+
+<canvas id="canvas" width="400" height="400"></canvas>
+<canvas id="canvas2" width="400" height="400"></canvas>
+
+<script>
+
+    var canvas=document.getElementById("canvas");
+    var cxt=canvas.getContext("2d");
+    cxt.beginPath();
+    cxt.moveTo(10,10);
+    //二次贝塞尔 控制点x,y,终点xy
+    cxt.quadraticCurveTo(30,100,100,10);
+    cxt.quadraticCurveTo(110,-10,140,100);
+
+
+    var endPoints=[{x:30,y:70},{x:330,y:270}];
+    var controlPoints=[{x:30,y:270},{x:330,y:70}];
+    var con=endPoints.concat(controlPoints);
+    //三次贝塞尔
+    cxt.moveTo(endPoints[0].x,endPoints[0].y);
+    cxt.bezierCurveTo(controlPoints[0].x,controlPoints[0].y,controlPoints[1].x,controlPoints[1].y,endPoints[1].x,endPoints[1].y);
+
+
+    cxt.stroke();
+
+    for(var k=0;k<con.length;k++){
+        cxt.beginPath();
+        cxt.arc(con[k].x,con[k].y,5,0,2*Math.PI,false);
+        cxt.stroke();
+
+    }
+
+
+
+
+
+
+
+
+    // 画波浪
+    var canvas2=document.getElementById("canvas2");
+    var cxt2=canvas2.getContext("2d");
+    var points=[];
+    for(var i=0;i<9;i++){
+       var y=i%2==0?280:120;
+       points.push({x:i*50,y:y});
+    }
+    console.log(points);
+//    cxt2.moveTo(points[0].x,points[0].y);
+    for(var n=0;n<points.length;n++){
+        cxt2.quadraticCurveTo(points[n].x,points[n].y,points[n].x+10,points[n].y+10);
+    }
+    cxt2.lineTo(400,400);
+    cxt2.lineTo(0,400);
+    cxt2.fill();
+    cxt2.stroke();
+
+
+</script>
+</body>
+</html>

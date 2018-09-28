@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            border: 1px solid #333;
+            background: url(images/3.jpg) 0 0 no-repeat;
+            background-size: cover;
+        }
+
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="400" height="400"></canvas>
+
+<script src="js/jquery.js"></script>
+<script>
+
+    var canvas = document.getElementById("canvas");
+    var cxt = canvas.getContext("2d"),
+        wWidth=window.innerWidth,
+        wHeight=window.innerHeight,
+        rect={width:wWidth,height:wHeight,x:0,y:0};
+
+    // ? 为什么图片会被擦除
+    /*var img=new Image();
+    img.src='images/3.jpg';
+    img.onload= function () {
+        cxt.drawImage(img, 0, 0);
+    }*/
+    var main = {
+        init: function () {
+            var that = this;
+
+
+
+            canvas.width=wWidth;
+            canvas.height=wHeight;
+
+
+
+            // 蓝色矩形
+            cxt.save();
+            cxt.fillStyle = '#09f';
+            cxt.fillRect(rect.x, rect.y,rect.width,rect.height);
+            cxt.restore();
+            this.bindEvent();
+
+        },
+        /**
+         * 转为canvas坐标
+         * @param x
+         * @param y
+         * @returns {{}}
+         */
+        toWindowXY: function (x, y) {
+            var obj = {};
+            obj.x = x - canvas.getBoundingClientRect().left;
+            obj.y = y - canvas.getBoundingClientRect().top;
+            return obj;
+        },
+        /**
+         * 图像合成
+         * @param val
+         * @param x
+         * @param y
+         */
+        andImg: function (val, x, y) {
+            cxt.save();
+            cxt.globalCompositeOperation = val;
+            // 红色圆形
+            cxt.fillStyle = 'rgba(255,255,0,1)';
+            cxt.beginPath();
+            cxt.arc(x, y, 50, 0, Math.PI * 2, false);
+            cxt.fill();
+            cxt.restore();
+            cxt.save();
+
+            var imgData=cxt.getImageData(rect.x,rect.y,rect.width,rect.height),
+                num=0;
+            for(var k=3;k<imgData.data.length;k+=4){
+                if(imgData.data[k]==0){
+                    num++;
+                }
+            }
+            // 如果擦除了70% 就显示全部 则
+            if(num>=canvas.width*canvas.height*0.7){
+                cxt.clearRect(0,0,canvas.width,canvas.height);
+                alert("擦除完0.7显示全部！");
+                $("#canvas").off("mousemove");
+
+            }
+            // 如果全擦除完
+            /*if(num==canvas.width*canvas.height){
+                console.log("擦除完毕啦！");
+                $("#canvas").off("mousemove");
+            }*/
+        },
+
+        selectOption: '',
+        bindEvent: function () {
+            var that = this;
+
+            $("#canvas").on("mousemove", function (e) {
+                var obj = that.toWindowXY(e.clientX, e.clientY);
+                if((obj.x>=rect.x && obj.x<=rect.x+rect.width) && (obj.y>=rect.y && obj.y<=rect.height+rect.y) ){
+                    that.andImg('destination-out', obj.x, obj.y);
+
+                }
+            });
+
+        }
+
+    };
+
+    main.init();
+
+
+
+</script>
+</body>
+</html>
