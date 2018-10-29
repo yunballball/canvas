@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>setTransform</title>
+    <script>
+        function draw(id)
+        {
+            var canvas=document.getElementById(id);
+            var context=canvas.getContext('2d');
+            context.strokeStyle="red";
+            context.strokeRect(30,10,60,20);
+
+            var rad=45*Math.PI/180;
+            context.setTransform(Math.cos(rad),Math.sin(rad),-Math.sin(rad),Math.cos(rad),0,0);
+
+            context.strokeStyle="green";
+            context.strokeRect(30,10,60,20);
+            context.setTransform(2.5,0,0,2.5,0,0);
+
+            context.strokeStyle="blue";
+            context.strokeRect(30,10,60,20);
+
+            context.setTransform(1,0,0,1,40,80);
+
+            context.strokeStyle="gray";
+            context.strokeRect(30,10,60,20);
+        }
+    </script>
+</head>
+<body onLoad="draw('canvas');">
+<canvas id="canvas" width="400" height="300"/>
+</body>
+</html>

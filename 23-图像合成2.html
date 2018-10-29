@@ -11,7 +11,7 @@
 
         canvas {
             border: 1px solid #333;
-            background: url(images/3.jpg) 0 0 no-repeat;
+            background:#00ffff url(images/3.jpg) 0 0 no-repeat;
             background-size: cover;
         }
 
@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<canvas id="canvas" width="400" height="400"></canvas>
+<canvas id="canvas"></canvas>
 
 <script src="js/jquery.js"></script>
 <script>
@@ -40,12 +40,8 @@
         init: function () {
             var that = this;
 
-
-
             canvas.width=wWidth;
             canvas.height=wHeight;
-
-
 
             // 蓝色矩形
             cxt.save();
@@ -74,15 +70,25 @@
          * @param y
          */
         andImg: function (val, x, y) {
+            var that=this;
             cxt.save();
             cxt.globalCompositeOperation = val;
+            cxt.lineCap='round';
+            cxt.lineJoin='round';
+            cxt.lineWidth=50;
+
             // 红色圆形
             cxt.fillStyle = 'rgba(255,255,0,1)';
             cxt.beginPath();
-            cxt.arc(x, y, 50, 0, Math.PI * 2, false);
-            cxt.fill();
-            cxt.restore();
-            cxt.save();
+            cxt.moveTo(that.x1,that.y1);
+            cxt.lineTo(that.x2,that.y2);
+            cxt.stroke();
+            cxt.restore()
+            that.x1 = that.x2;
+            that.y1 = that.y2;
+
+//            cxt.arc(x, y, 50, 0, Math.PI * 2, false);
+//            cxt.restore();
 
             var imgData=cxt.getImageData(rect.x,rect.y,rect.width,rect.height),
                 num=0;
@@ -104,17 +110,33 @@
                 $("#canvas").off("mousemove");
             }*/
         },
-
-        selectOption: '',
+        isDown:false,
         bindEvent: function () {
             var that = this;
 
-            $("#canvas").on("mousemove", function (e) {
+            $("#canvas").on("mousedown", function (e) {
+                that.isDown=true;
                 var obj = that.toWindowXY(e.clientX, e.clientY);
+                that.x1=obj.x;
+                that.y1=obj.y;
+            });
+            $("#canvas").on("mousemove", function (e) {
+                // 如果没有按下
+                if(!that.isDown){
+                   return;
+                }
+                var obj = that.toWindowXY(e.clientX, e.clientY);
+                that.x2=obj.x;
+                that.y2=obj.y;
                 if((obj.x>=rect.x && obj.x<=rect.x+rect.width) && (obj.y>=rect.y && obj.y<=rect.height+rect.y) ){
                     that.andImg('destination-out', obj.x, obj.y);
 
                 }
+            });
+            $("#canvas").on("mouseup", function (e) {
+               that.isDown=false;
+                var obj = that.toWindowXY(e.clientX, e.clientY);
+                console.log('终点x:'+obj.x+';终点y:'+obj.y);
             });
 
         }

@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        canvas {
+            border: 1px solid #333;
+        }
+
+    </style>
+</head>
+<body>
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    canvas {
+        display: block;
+        margin: 10px auto;
+    }
+</style>
+<label for="">描边颜色：</label>
+<select name="" id="strokeStyleSelect">
+    <option value="#f00">红色</option>
+    <option value="#0f0">绿色</option>
+    <option value="#00f">蓝色</option>
+</select>
+<label for="">填充颜色：</label>
+<select name="" id="fillStyleSelect">
+    <option value="#f00">红色</option>
+    <option value="#0f0">绿色</option>
+    <option value="#00f">蓝色</option>
+</select>
+<label for="">边数：</label>
+<select name="" id="sidesSelect">
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="6">6</option>
+    <option value="8">8</option>
+</select>
+<label for="">startAngle：</label>
+<select name="" id="startAngleSelect">
+    <option value="0">0</option>
+    <option value="30">30</option>
+    <option value="60">60</option>
+    <option value="90">90</option>
+</select>
+<label for="">fill：</label>
+<input type="checkbox" name="" id="fillCheckbox"/>
+
+<button id="eraseAllButton">erase</button>
+<label for="">edit：</label>
+<input type="checkbox" name="" id="editCheckbox"/>
+<canvas id="canvas" width="500" height="400">不支持canvas</canvas>
+
+<script src="js/jquery.js"></script>
+
+<script>
+var canvas = document.getElementById('canvas'),
+        context = canvas.getContext('2d'),
+        eraseAllButton = document.getElementById('eraseAllButton'),
+        strokeStyleSelect = document.getElementById('strokeStyleSelect'),
+        startAngleSelect = document.getElementById('startAngleSelect'),
+
+        fillStyleSelect = document.getElementById('fillStyleSelect'),
+        fillCheckbox = document.getElementById('fillCheckbox'),
+        editCheckbox = document.getElementById('editCheckbox'),
+
+        sidesSelect = document.getElementById('sidesSelect');
+
+var edit = false;
+var mousedown = {}//记录鼠标按下起始点
+var imageData1 = null;
+var mouseIn = null;//记录鼠标是否按了下去
+var line_list = {} //记录鼠标的终点
+
+var Graphical = [];//存放图形引用的数组
+var map_name = null//每个生成图形的名称
+var foucsIndex = -1; //被选中移动图形的下标
+
+
+function saveImage() {  //储存此刻画布数据
+    imageData1 = context.getImageData(0, 0, canvas.width, canvas.height)
+}
+function loadingImage() { //导入画布数据
+    context.putImageData(imageData1, 0, 0)
+}
+
+
+editCheckbox.onchange = function () {
+    if (this.checked) {
+        console.log("进入编辑模式")
+        edit = true
+    } else {
+        console.log("进入画图模式")
+        edit = false
+    }
+
+}
+
+function windowToCanvas(event) {  //算出你点击在canvas画布的坐标 并返回
+    var rect = canvas.getBoundingClientRect()
+    return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+    }
+}
+
+/*求线长*/
+function line_width() {
+    var x_width = Math.abs(line_list.x - mousedown.x)
+    var y_width = Math.abs(line_list.y - mousedown.y)
+
+    return Math.sqrt(x_width * x_width + y_width * y_width)
+}
+
+// 按下
+canvas.onmousedown = function (event) {
+    saveImage()
+    var some = windowToCanvas(event)
+
+    mousedown.x = some.x;
+    mousedown.y = some.y
+
+    mouseIn = true;
+    if(Graphical.length==0){
+        return;
+    }
+    if(Graphical.length==0 && editCheckbox.checked){
+        console.log('没有可编辑图形！');
+        return;
+    }
+    Graphical.forEach(function (el, index) {
+        el.createPath();
+        if (context.isPointInPath(mousedown.x, mousedown.y)) {
+            foucsIndex = index;
+        }
+
+
+    })
+
+}
+// 拖动
+canvas.onmousemove = function (event) {
+    line_list = windowToCanvas(event);
+    //新建模式：如果按下鼠标并拖行
+    if (mouseIn && !edit) {
+        loadingImage()
+        context.beginPath()
+        // 按下起点到终点的长度 是多边形外接圆半径
+        var r = line_width();
+        map_name = new Polygon(mousedown.x, mousedown.y, r, sidesSelect.value, startAngleSelect.value, strokeStyleSelect.value, fillStyleSelect.value, fillCheckbox.checked);
+        map_name.stroke();
+        if (fillCheckbox.checked) {
+            map_name.fill();
+        }
+
+    }
+    //编辑模式：如果按下鼠标并且在图形内
+    if (mouseIn && edit &&  foucsIndex!=-1) {
+        context.clearRect(0, 0, canvas.width, canvas.height)
+        Graphical[foucsIndex].move(line_list.x,line_list.y);
+        Graphical.forEach(function (el) {
+            el.stroke();
+            if (el.filled) {
+                el.fill();
+
+            }
+        })
+    }
+
+
+}
+
+canvas.onmouseup = function () {
+    mouseIn = false; //鼠标抬起来了
+    if (!edit) {
+        Graphical.push(map_name)
+    }else{
+        foucsIndex=-1;
+    }
+
+}
+
+var Point = function (x, y) {
+    this.x = x;
+    this.y = y;
+};
+/*多边形类*/
+var Polygon = function (centerX, centerY, radius, sides, startAngle, strokeStyle, fillStyle, filled) {
+    this.x = centerX;
+    this.y = centerY;
+    this.radius = radius;
+    this.sides = sides;
+    this.startAngle = startAngle;
+    this.strokeStyle = strokeStyle;
+    this.fillStyle = fillStyle;
+    this.filled = filled;
+};
+
+Polygon.prototype = {
+    getPoints: function () {
+        var points = [],
+        // 根据边数 算出 应该平均多少角度
+                angel = 360 / this.sides * Math.PI / 180;
+        for (var i = 0; i < this.sides; i++) {
+            points.push(new Point(this.x + this.radius * Math.cos(i * angel), this.y + this.radius * Math.sin(i * angel)));
+        }
+        return points;
+    },
+    createPath: function () {
+        var points = this.getPoints();
+        var angle=this.startAngle*Math.PI/180||0;
+        context.beginPath();
+        context.moveTo(points[0].x, points[0].y);
+        for (var i = 1; i < points.length; i++) {
+            context.lineTo(points[i].x, points[i].y);
+        }
+        context.closePath();
+    },
+    stroke: function () {
+
+        context.save();
+        context.strokeStyle = this.strokeStyle;
+        this.createPath();
+        context.stroke();
+        context.restore();
+    },
+    fill: function () {
+        context.save();
+        context.fillStyle = this.fillStyle;
+        this.createPath();
+
+        context.fill();
+        context.restore();
+    },
+    move: function (x, y) {
+        this.x = x;
+        this.y = y;
+    }
+};
+
+
+</script>
+</body>
+</html>

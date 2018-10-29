@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{margin: 0;}
+        canvas{border:1px solid #333;}
+
+    </style>
+</head>
+<body>
+<div>
+    <label for="">描边颜色：</label>
+    <select name="" id="strokeSelect">
+        <option value="#f00">红色</option>
+        <option value="#0f0">绿色</option>
+        <option value="#00f">蓝色</option>
+    </select>
+    <label for="">填充颜色：</label>
+    <select name="" id="fillSelect">
+        <option value="#f00">红色</option>
+        <option value="#0f0">绿色</option>
+        <option value="#00f">蓝色</option>
+    </select>
+    <label for="">边数：</label>
+    <select name="" id="sideSelect">
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="6">6</option>
+        <option value="8">8</option>
+    </select>
+    <label for="">fill：</label>
+    <input type="checkbox" name="" id="ifFill"/>
+
+
+
+</div>
+<canvas id="canvas" width="400" height="400"></canvas>
+
+
+<script src="js/jquery.js"></script>
+<script>
+    var canvas=document.getElementById("canvas");
+    var cxt=canvas.getContext("2d");
+    // 生成多边形步骤
+     // 需知：
+     // 1.起点为外接圆圆心，
+     // 2.外接圆的半径(起点到终点的距离)，
+     // 3.画多边形（根据边数算出各个顶点，连点成线）
+
+
+    // 主要代码
+    var main = {
+        init: function () {
+            var that = this;
+            that.bindEvent();
+
+        },
+        /**
+         * 转为canvas坐标
+         * @param x
+         * @param y
+         * @returns {{}}
+         */
+        toWindowXY: function (x, y) {
+            var obj = {};
+            obj.x = x - canvas.getBoundingClientRect().left;
+            obj.y = y - canvas.getBoundingClientRect().top;
+            return obj;
+        },
+        mouseDown:false,
+        // 起点 x y
+        startXY:{},
+        // 终点 x y
+        endcurXY:{},
+        /**
+         * 事件绑定
+         */
+        bindEvent: function () {
+            var that=this;
+            // 按下
+            $("#canvas").on('mousedown', function (e) {
+                that.mouseDown=true;
+                that.startXY=that.toWindowXY(e.clientX, e.clientY);
+            });
+            // 移动
+            $("#canvas").on('mousemove', function (e) {
+                if(that.mouseDown){
+                    that.endcurXY=that.toWindowXY(e.clientX, e.clientY);
+                }
+            });
+            $("#canvas").on('mouseup', function (e) {
+                that.mouseDown=false;
+                that.drawSides(that.startXY.x,that.startXY.y,that.endcurXY.x,that.endcurXY.y);
+
+            });
+
+
+        },
+        /**
+         * 画图形
+         * @param sX
+         * @param sY
+         * @param eX
+         * @param eY
+         */
+        drawSides: function (sX, sY, eX, eY) {
+            var that=this;
+            // 求半径 求出两线绝对值
+            var dx = Math.abs(eX - sX);
+            var dy = Math.abs(eY - sY);
+            //  得半径
+            var dis = parseInt(Math.sqrt(Math.pow(dx,2)+Math.pow(dy,2)));
+            
+            // 得顶点
+            var points=that.getPoints(sX,sY,dis,$("#sideSelect").val()||'4');
+            // 连线
+            that.strokeLine(points);
+
+        },
+        /**
+         * 连点成线
+         * @param arr
+         */
+        strokeLine: function (arr) {
+            cxt.save();
+            cxt.fillStyle=$("#fillSelect").val();
+            cxt.strokeStyle=$("#strokeSelect").val();
+            cxt.beginPath();
+            cxt.moveTo(arr[0].x,arr[0].y);
+            for(var k=1;k<arr.length;k++){
+                      cxt.lineTo(arr[k].x,arr[k].y);
+            }
+            cxt.closePath();
+            cxt.fill();
+            cxt.stroke();
+            cxt.restore();
+        },
+        /**
+         * 获取点
+         * @param x
+         * @param y
+         * @param r
+         * @param side
+         * @returns {Array}
+         */
+        getPoints: function (x, y, r,side) {
+            var that=this;
+            var points=[],
+                // 根据边数 算出 应该平均多少角度
+                angel=360/side * Math.PI / 180;
+            for(var i=0;i<side;i++){
+                points.push({x:x +r* Math.cos(i * angel ), y:y + r * Math.sin(i * angel)});
+            }
+            return points;
+        }
+    };
+    main.init();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

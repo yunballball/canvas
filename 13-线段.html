@@ -63,15 +63,29 @@
     context3.stroke();
     // 纵向向标尺
     for(var n=0;n<=90;n++){
+        context3.save();
+
         context3.beginPath();
         if(n%5==0){
+
+            // 圆点
+            context3.arc(12,20.5+(n*4),1,0,2*Math.PI,false);
+            context3.fill();
+
             context3.moveTo(15,20.5+(n*4));
             context3.lineTo(25,20.5+(n*4));
+            // 左右对齐 left right center
+            context3.textAlign='right';
+            // 上下对齐 top middle bottom
+            context3.textBaseline='middle';
+
+            context3.fillText(n/5,10,20.5+(n*4));
         }else{
             context3.moveTo(20,20.5+(n*4));
             context3.lineTo(25,20.5+(n*4));
         }
         context3.stroke();
+        context3.restore();
     }
     context3.beginPath();
     context3.moveTo(20,380.5);
@@ -79,16 +93,23 @@
     context3.stroke();
     // 横向标尺
     for(var m=1;m<=90;m++){
+        context3.save();
         context3.beginPath();
         if(m%5==0){
+            context3.arc(20.5+(m*4),388,1,0,2*Math.PI,false);
+            context3.fill();
             context3.moveTo(20.5+(m*4),370);
             context3.lineTo(20.5+(m*4),390);
-            context3.fillText(m/5,14+(m*4),395);
+            context3.textAlign='center';
+            context3.textBaseline='top';
+            context3.fillText(m/5,20.5+(m*4),388);
         }else{
             context3.moveTo(20.5+(m*4),375);
             context3.lineTo(20.5+(m*4),380);
         }
         context3.stroke();
+        context3.restore();
+
     }
 
 
