@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;}
+        canvas{display: block;margin: 10px auto;}
+
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="400" height="400"></canvas>
+
+<button id="btn">像素化</button>
+
+<script src="js/commonUtil.js"></script>
+
+<script>
+    var canvas=document.getElementById("canvas");
+    var btn=document.getElementById("btn");
+    var cxt=canvas.getContext("2d");
+
+    for(var y=0;y<=40;y+=10){
+        for(var x=0;x<=400;x+=8){
+        cxt.save();
+        cxt.beginPath();
+        cxt.fillStyle='#333';
+        cxt.arc(x,y,1,0,2*Math.PI,false);
+        cxt.fill();
+        console.log({x:x,y:y});
+        cxt.restore();
+    }
+
+
+    }
+
+
+
+
+
+
+</script>
+
+
+</body>
+</html>

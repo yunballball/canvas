@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <title>Document</title>
+
+    <style>
+        canvas{
+            margin: 0;
+            padding: 0;}
+        #playBtn{
+            position: fixed; bottom: 10px; left: 10px;
+            z-index: 10;}
+        /*video{position: fixed;top:80%; left: -100%;}*/
+
+    </style>
+
+</head>
+<body>
+<p id="pTxt"></p>
+<img id="catchImg" src="" alt=""/>
+<canvas id="canvas" width="" height=""></canvas>
+<video controls style="display: none;" x5-video-player-type="h5" x5-video-player-fullscreen="true" id="video" src="images/test.mp4"></video>
+
+<button id="playBtn">播放</button>
+
+<script src="js/jquery.js"></script>
+<script src="js/requestAnimationFrame.js"></script>
+<script>
+    var canvas=document.getElementById("canvas");
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+    var video=document.getElementById("video");
+    var ctx=canvas.getContext("2d");
+    var img=new Image();
+
+
+
+
+    $("#playBtn").on("click", function () {
+        if(video.paused){
+            video.play();
+
+        }else{
+            video.pause();
+            var imgData =canvas.toDataURL("image/png");
+            $("#pTxt").html(imgData);
+            $("#catchImg").attr('src',imgData);
+        }
+        window.requestNextAnimationFrame(animate);
+    });
+
+
+
+   function animate(){
+       if(!video.ended){
+          ctx.drawImage(video,0,0,canvas.width,canvas.height);
+           window.requestNextAnimationFrame(animate);
+       }
+   };
+
+
+
+
+
+
+</script>
+
+
+</body>
+</html>

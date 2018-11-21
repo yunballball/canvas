@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0; overflow: hidden;}
+        canvas{border:1px solid #ddd;}
+    </style>
+</head>
+<body>
+
+
+<canvas id="canvas" width="400" height="400"></canvas>
+
+<script src="js/jquery.js"></script>
+<script src="js/commonUtil.js"></script>
+<script>
+    var canvas=document.getElementById("canvas");
+    var ctx=canvas.getContext("2d");
+
+    var isDown=false,startObj={},endObj,surfaceData,rubberRectObj={};
+
+    var current={
+        saveSurface: function () {
+            surfaceData=ctx.getImageData(0,0,canvas.width,canvas.height);
+        },
+        restoreSurface: function () {
+            ctx.putImageData(surfaceData,0,0);
+        },
+        updateRubberband: function (lattered) {
+            this.drawShape(lattered);
+        },
+        drawRect: function (loc) {
+            rubberRectObj.width=Math.abs(startObj.x-loc.x);
+            rubberRectObj.height=Math.abs(startObj.y-loc.y);
+            if(loc.x>startObj.x){
+                rubberRectObj.left=startObj.x;
+            }else{
+                rubberRectObj.left=loc.x;
+            }
+            if(loc.y>startObj.y){
+                rubberRectObj.top=startObj.y;
+            }else{
+                rubberRectObj.top=loc.y;
+            }
+            ctx.save();
+            ctx.fillRect(rubberRectObj.left,rubberRectObj.top,rubberRectObj.width,rubberRectObj.height);
+            ctx.restore();
+
+        },
+        drawShape: function (loc) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(startObj.x,startObj.y);
+            ctx.lineTo(loc.x,loc.y);
+            ctx.stroke();
+            ctx.restore();
+
+        }
+    };
+
+    // 按下
+    canvas.onmousedown= function (e) {
+        e.preventDefault();
+        // 相当于在按下时候拍了个照片
+        current.saveSurface();
+        startObj=commonUtil.toCanvasXY(e.clientX, e.clientY);
+        isDown=true;
+    };
+
+    // 移动
+    canvas.onmousemove= function (e) {
+        endObj=commonUtil.toCanvasXY(e.clientX, e.clientY);
+         if(isDown){
+             e.preventDefault();
+             current.restoreSurface();
+             current.updateRubberband(endObj);
+
+         }
+    };
+
+
+    canvas.onmouseup= function (e) {
+        var t=commonUtil.toCanvasXY(e.clientX, e.clientY);
+        current.drawRect(t);
+        isDown=false;
+    };
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+</body>
+</html>
+
+

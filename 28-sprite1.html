@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>Document</title>
+
+    <style>
+        *{
+            margin: 0; padding: 0;}
+        canvas{display: block; margin:50px auto;}
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="400" height="400"></canvas>
+
+
+
+
+
+<script>
+    var canvas=document.getElementById("canvas");
+    var ctx=canvas.getContext("2d");
+
+    var psdWidth=640,
+        orImgWidth=2030/7,
+        orImgHeight=298,
+        k=0,
+        spr=new Image();
+
+
+    // 宽度 自适应比例
+    canvas.width=orImgWidth/psdWidth*window.innerWidth;
+    // 高度根据 宽度 以及元素实际高宽比决定
+    canvas.height=canvas.width*(orImgHeight/orImgWidth);
+
+    spr.src='images/sprite/listen-monkey3.png';
+
+
+
+    // 1.精灵图循环
+    // 2.自适应
+    spr.onload=function () {
+        ctx.drawImage(spr,0,0,290,298,0,0,canvas.width,canvas.height);
+        ani();
+    };
+
+    function ani() {
+        var t=setInterval(function () {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.drawImage(spr,k*orImgWidth,0,orImgWidth,orImgHeight,0,0,canvas.width,canvas.height);
+            k++;
+            if(k==7){
+                k=0;
+            }
+
+        },100);
+    };
+
+
+
+
+
+</script>
+
+
+</body>
+</html>

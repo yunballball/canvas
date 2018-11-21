@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0; overflow: hidden;}
+        canvas{border:1px solid #ddd;}
+    </style>
+</head>
+<body>
+<div>
+    <button id="btn">putData</button>
+</div>
+<canvas id="canvas" width="400" height="400"></canvas>
+
+
+<script src="js/jquery.js"></script>
+<script src="js/commonUtil.js"></script>
+<script>
+    var canvas=document.getElementById('canvas');
+    var ctx=canvas.getContext('2d');
+    var img=new Image();
+    img.src='images/m1.png';
+    var imgData;
+
+    var backCanvas=document.createElement("canvas");
+        backCanvas.width=400;
+        backCanvas.height=400;
+    var backCtx=backCanvas.getContext("2d");
+
+    img.onload= function () {
+      backCtx.drawImage(img,0,0);
+      imgData=backCtx.getImageData(100,100,200,200);
+    };
+
+    /*getImageData(起始点的横坐标, 起始点的纵坐标, 获取的宽度, 获取的高度)
+
+      putImageData(绘制点的横坐标, 绘制点点纵坐标, imgData的起始点横坐标, imgData的起始点纵坐标, 宽度, 高度
+                如果 imgData的起始点横纵坐标 不是0,0, 那么从0,0 到 起始点横纵坐标 那么那块区域会以空白展示
+    */
+    $("#btn").on("click", function () {
+        ctx.putImageData(imgData,0,0);
+        ctx.putImageData(imgData,0,210,0,0,50,50);
+        ctx.putImageData(imgData,0,270,10,0,100,80);
+    });
+
+
+
+
+
+</script>
+
+
+</body>
+</html>
+
+

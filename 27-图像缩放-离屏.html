@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0; overflow: hidden;}
+        canvas{border:1px solid #ddd;}
+        .range-box{width:400px;}
+    </style>
+</head>
+<body>
+<div>
+
+<input class="range-box" type="range" value="1" name="" min="1" max="4" step="0.1" id="rangeBtn"/>
+
+</div>
+
+<canvas id="canvas" width="400" height="400"></canvas>
+
+
+<script src="js/jquery.js"></script>
+<script src="js/commonUtil.js"></script>
+<script>
+    var canvas=document.getElementById('canvas');
+    var ctx=canvas.getContext('2d');
+
+
+    // 创建离屏canvas 这个不属于任何元素
+    // 设置宽高 因为默认是300*150
+    // 在离屏中绘制元素
+
+
+    // 初始化时复制离屏到可见的canvas中
+
+    var  d=document.getElementsByTagName("body")[0],
+         backCanvas=document.createElement("canvas");
+       d.appendChild(backCanvas);
+    backCanvas.width=canvas.width;
+    backCanvas.height=canvas.height;
+    backCanvasCtx=backCanvas.getContext('2d');
+    var backImg=new Image();
+    backImg.src='images/m1.png';
+
+    backImg.onload= function () {
+        backCanvasCtx.drawImage(backImg,0,0,canvas.width,canvas.height);
+        // drawImg 是canvas元素不是2d环境元素 这个切记
+        ctx.drawImage(backCanvas,0,0);
+    };
+
+
+    // 滑动时改变值
+    $('#rangeBtn').on('input propertychange',function(){
+        var val=$(this).val();
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        // drawImg 是canvas元素不是2d环境元素 这个切记
+        ctx.drawImage(backCanvas,(canvas.width*(1-val))/2,(canvas.height*(1-val))/2,canvas.width*val,canvas.height*val);
+
+    })
+
+
+
+
+
+
+
+
+
+</script>
+
+
+</body>
+</html>
+
+

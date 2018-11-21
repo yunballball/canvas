@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        canvas {
+            display: block;
+                background-color:#00ccff;
+        }
+
+        input {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+
+<input id="ipt1" placeholder="请输入文字" type="text"/>
+
+
+<canvas id="canvas" width="" height=""></canvas>
+<script>
+    var canvas = document.getElementById("canvas");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    var ipt1 = document.getElementById("ipt1");
+    var cxt = canvas.getContext("2d");
+    var imgData, pointsArr = [], colorArr = [], allData = [];
+
+
+    // 用离屏canvas
+    backCanvas = document.createElement("canvas");
+    backCanvas.width = canvas.width;
+    backCanvas.height = canvas.height;
+    backCanvasCtx = backCanvas.getContext('2d');
+
+
+
+
+    var obj = {
+        /**
+         * 写文字
+         * @param txt
+         * @param size
+         */
+        showText: function (txt, size) {
+            backCanvasCtx.textAlign = 'center';
+            backCanvasCtx.textBaseline = 'middle';
+            backCanvasCtx.save();
+            backCanvasCtx.font = size + 'px FZKaTong-M19S';
+            backCanvasCtx.fillStyle = '#f00';
+            backCanvasCtx.fillText(txt, canvas.width / 2, canvas.height / 2);
+            backCanvasCtx.restore();
+
+
+            // 这里为了测试中心点
+//            backCanvasCtx.save();
+//            backCanvasCtx.fillStyle='#ff0';
+
+//            backCanvasCtx.beginPath();
+//            backCanvasCtx.arc(canvas.width/2,canvas.height/2,10,0,Math.PI*2,false);
+//            backCanvasCtx.fill();
+//            backCanvasCtx.restore();
+        },
+        points: [],
+        //
+        getPoints: function () {
+            var that = this;
+            that.points = [];
+            var imgData = backCanvasCtx.getImageData(0, 0, canvas.width, canvas.height);
+            var pixelData = imgData.data;
+            for (var nh = 0; nh < backCanvas.height; nh += 5) {
+                for (var nw = 0; nw < backCanvas.width; nw += 5) {
+                    // 括号内是求出对应位置；*4是像素位置 数组每四个值是一个像素点
+                    var num = (nh * backCanvas.width + nw) * 4;
+                    if (pixelData[num] != 0) {
+                        that.points.push({x: nw, y: nh});
+                    }
+                }
+            }
+            return that.points;
+
+        },
+        /**
+         * 显示粒子
+         */
+        showLizi: function (v,size) {
+            var that=this;
+            cxt.clearRect(0, 0, canvas.width, canvas.height);
+            backCanvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+            // 1.在离屏上写红色的字并上下左右居中
+            // 2.像素化文字(用任一颜色吧)
+            // 3.将其显示到主屏上（找到像素对应坐标，用圆点表示出来）
+            that.showText(v, size);
+            var points = this.getPoints();
+            for (var k = 0; k < points.length; k++) {
+                cxt.save();
+                var color = Math.floor(Math.random() * 256);
+                var color1 = Math.floor(Math.random() * 80);
+                var color2 = Math.floor(Math.random() * 25);
+                var color3 = Math.floor(Math.random() * 8);
+                cxt.beginPath();
+                cxt.fillStyle = 'rgba(' + color + ',' + color1 + ',' + color2 +',' + color3 +')';
+                cxt.arc(points[k].x, points[k].y, 2, 0, 2 * Math.PI, false);
+                cxt.fill();
+                cxt.restore();
+            }
+        }
+    };
+
+
+    // 按钮操作
+    ipt1.onkeyup = function (e) {
+        if (e.keyCode == 13) {
+            var v = ipt1.value;
+            if(!v){
+                alert('请输入文字');
+                return;
+            }
+            obj.showLizi(v,100);
+
+
+        }
+
+    };
+
+    // 默认画面显示hello world
+    obj.showLizi('hello world!', 60);
+
+
+
+</script>
+
+
+</body>
+</html>

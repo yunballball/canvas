@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;}
+        canvas{border:1px solid #ddd;display: block;margin: 10px auto;}
+        .colorPick{width:30px;height: 30px;}
+    </style>
+</head>
+<body>
+<div class="colorPick" id="colorPick">
+
+</div>
+<div id="colorBox">
+
+</div>
+<canvas id="canvas" width="400" height="400"></canvas>
+<script src="js/commonUtil.js"></script>
+
+<script>
+    var canvas=document.getElementById("canvas");
+    var oColor=document.getElementById("colorBox");
+    var oPick=document.getElementById("colorPick");
+    var cxt=canvas.getContext("2d");
+    var image=new Image();
+    var imgData,isDown=false;
+    image.src='images/m1.png';
+    image.onload= function () {
+        cxt.drawImage(image,0,0);
+    }
+
+    canvas.onmousemove=function (e) {
+        var mouse=commonUtil.toCanvasXY(e.clientX,e.clientY);
+        var colors=[];
+        colorsNum=cxt.getImageData((parseInt(mouse.x<0?1:mouse.x)),(parseInt(mouse.y<0?1:mouse.y)),1,1);
+        color1=colorsNum.data[0];
+        color2=colorsNum.data[1];
+        color3=colorsNum.data[2];
+        oColor.innerHTML='('+color1+','+color2+','+color3+')';
+        oPick.style.backgroundColor='rgba('+color1+','+color2+','+color3+',255)';
+    };
+
+
+
+</script>
+
+
+</body>
+</html>

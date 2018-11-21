@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;}
+        canvas{display: block;margin: 10px auto;}
+        .colorPick{width:30px;height: 30px;}
+
+    </style>
+</head>
+<body>
+<div class="colorPick" id="colorPick">
+
+</div>
+<div id="colorBox">
+
+</div>
+<canvas id="canvas" width="400" height="400"></canvas>
+<script src="js/commonUtil.js"></script>
+
+<script>
+    var canvas=document.getElementById("canvas");
+    var cxt=canvas.getContext("2d");
+    var oColor=document.getElementById("colorBox");
+    var oPick=document.getElementById("colorPick");
+    var image=new Image();
+    var imgData;
+    image.src='images/m1.png';
+    image.onload= function () {
+        cxt.drawImage(image,0,0);
+        imgData=cxt.getImageData(0,0,400,400);
+    }
+
+    canvas.onmousemove=function (e) {
+        var mouse=commonUtil.toCanvasXY(e.clientX,e.clientY);
+        var pos=parseInt(mouse.y-1)*canvas.width+parseInt(mouse.x);
+        var posNum=pos-1;
+        color1=imgData.data[posNum*4];
+        color2=imgData.data[posNum*4+1];
+        color3=imgData.data[posNum*4+2];
+        console.log(pos);
+        oPick.style.backgroundColor='rgba('+color1+','+color2+','+color3+',255)';
+
+//        console.table({pos:pos,mouse:mouse});
+
+    };
+
+
+
+</script>
+
+
+</body>
+</html>

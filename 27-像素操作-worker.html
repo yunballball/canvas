@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <button id="btn">操作</button>
+</div>
+
+
+<div id="pContent"></div>
+
+<canvas id="canvas" width="400" height="400"></canvas>
+
+
+<script>
+    var pCon = document.getElementById("pContent");
+    var btn = document.getElementById("btn");
+
+
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+    var img = new Image();
+    img.src = 'images/m1.png';
+    var imgData;
+    var work = new Worker("js/filterWorker.js");
+
+
+    img.onload = function () {
+        ctx.drawImage(img, 0, 0);
+        imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    };
+
+    btn.onclick=function () {
+        work.postMessage({imgData:imgData});
+    };
+
+    work.onmessage=function (e) {
+        ctx.putImageData(e.data,0,0);
+        console.log(new Date().getTime());
+        console.log('成功！');
+    }
+
+
+</script>
+
+
+</body>
+</html>
+
+

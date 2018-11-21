@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #00ffff;
+        }
+
+        canvas {
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <button id="resetBtn">reset</button>
+
+</div>
+
+<canvas id="canvas" width="400" height="400"></canvas>
+
+
+<script src="js/jquery.js"></script>
+<script src="js/commonUtil.js"></script>
+<script>
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+
+    var backCanvas = document.createElement("canvas");
+    backCanvas.width = canvas.width;
+    backCanvas.height = canvas.height;
+    var backCtx = backCanvas.getContext('2d');
+
+    // 创建离屏canvas 这个不属于任何元素
+    // 设置宽高 因为默认是300*150
+    // 在离屏中绘制元素
+    // 操作离屏图像
+
+
+    var page = {
+        init: function () {
+            var that = this;
+            var image = new Image();
+            image.src = 'images/m1.png';
+            image.onload = function () {
+                backCtx.drawImage(image, 0, 0);
+                ctx.drawImage(image, 0, 0);
+                that.initImgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            };
+            this.bindEvent();
+
+        },
+        initImgData: '',
+        downImgData: '',
+        startObj: '',
+        endObj: '',
+        isDown: false,
+        rect: {},
+        drawRect: function (loc) {
+            var that = this;
+            that.rect.left = Math.min(loc.x, that.startObj.x);
+            that.rect.top = Math.min(loc.y, that.startObj.y);
+            that.rect.width = Math.abs(loc.x - that.startObj.x);
+            that.rect.height = Math.abs(loc.y - that.startObj.y);
+            ctx.save();
+            ctx.globalAlpha = 0.5;
+            ctx.fillRect(that.rect.left, that.rect.top, that.rect.width, that.rect.height);
+            ctx.restore();
+
+        },
+        bindEvent: function () {
+            var that = this;
+            // 按下时候确定开始位置
+            $("#canvas").on("mousedown", function (e) {
+                e.preventDefault();
+                that.startObj = commonUtil.toCanvasXY(e.clientX, e.clientY);
+                that.downImgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                that.isDown = true;
+            });
+
+            //移动时候
+            // 1.画矩形
+            // 2.框选离屏的区域
+            $("#canvas").on('mousemove', function (e) {
+                e.preventDefault();
+                that.endObj = commonUtil.toCanvasXY(e.clientX, e.clientY);
+                if (that.isDown) {
+                    ctx.putImageData(that.downImgData, 0, 0);
+                    that.drawRect(that.endObj);
+                }
+
+            });
+            $("#canvas").on('mouseup', function (e) {
+               var k = commonUtil.toCanvasXY(e.clientX, e.clientY);
+
+
+                if(k.x!=that.endObj.x && k.y!=that.endObj.y){
+                    return;
+                }
+                that.isDown = false;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(backCanvas, that.rect.left, that.rect.top, that.rect.width, that.rect.height, 0, 0, canvas.width, canvas.height);
+                backCtx.drawImage(canvas, 0, 0);
+            });
+
+
+            // 点重置按钮
+            $("#resetBtn").on("click", function () {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                backCtx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.putImageData(that.initImgData, 0, 0);
+                backCtx.putImageData(that.initImgData, 0, 0);
+            });
+        }
+    };
+
+    page.init();
+
+
+</script>
+
+
+</body>
+</html>
+
+

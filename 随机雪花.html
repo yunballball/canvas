@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        canvas {
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+
+
+    function RandomCircles(option) {
+        this.x = option.x;
+        this.y = option.y;
+        this.width = option.width;
+        this.color = option.color || "#fff";
+    }
+
+    RandomCircles.prototype = {
+        draw: function (ctx) {
+            ctx.beginPath();
+            ctx.fillStyle = '#fff';
+            ctx.arc(this.x, this.y, this.width, 0, 2 * Math.PI, false);
+            ctx.fill();
+        }
+    };
+
+    var canvas = document.getElementById("canvas");
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    var ctx = canvas.getContext("2d");
+    var circleArr = [];
+    // 填充背景
+    canvas.width = width;
+    canvas.height = height;
+    ctx.fillStyle = '#00f';
+    ctx.fillRect(0, 0, width, height);
+
+    function drawbgCircle(ctx, num) {
+        circleArr = [];
+        for (var n = 0; n < num; n++) {
+            var option = {
+                width: Math.random() * 15 + 5,
+                x: Math.random() * (window.innerWidth - 20 * 2) + 20,
+                y: Math.random() * (window.innerHeight - 20 * 2) + 20
+            };
+            var t = new RandomCircles(option);
+            circleArr.push(option);
+            t.draw(ctx, num);
+        }
+    }
+    drawbgCircle(ctx, 50);
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <button id="btn">putData</button>
+</div>
+<canvas id="canvas" width="400" height="400"></canvas>
+
+
+<script src="js/filter.js"></script>
+<script>
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+    var img = new Image();
+    img.src = 'images/m1.png';
+    var imgData;
+
+
+
+    img.onload = function () {
+        ctx.drawImage(img,0,0);
+        imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    };
+
+    document.getElementById("btn").onclick=function () {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        // 这个num指的是 宽高每个像素块200*200，对于400*400的来说 可以分为4个像素块
+        new Filter({'type':'pixel','num':100},imgData,ctx);
+
+
+//        new Filter('inverse',imgData,ctx);
+
+
+    };
+
+
+</script>
+
+
+</body>
+</html>
+
+

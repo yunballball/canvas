@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0; overflow: hidden;}
+        canvas{border:1px solid #ddd;}
+    </style>
+</head>
+<body>
+<div>
+    <button id="btn">putData</button>
+</div>
+<canvas id="canvas" width="400" height="400"></canvas>
+
+
+<script src="js/jquery.js"></script>
+<script src="js/commonUtil.js"></script>
+<script>
+    var canvas=document.getElementById('canvas');
+    var ctx=canvas.getContext('2d');
+    var img=new Image();
+    img.src='images/m1.png';
+    var imgData;
+
+    var backCanvas=document.createElement("canvas");
+        backCanvas.width=400;
+        backCanvas.height=400;
+    var backCtx=backCanvas.getContext("2d");
+
+    img.onload= function () {
+      backCtx.drawImage(img,0,0);
+      imgData=backCtx.getImageData(100,100,200,200);
+    };
+
+    $("#btn").on("click", function () {
+        var data=imgData.data;
+        // 带透明度的
+        for(var i=4;i<data.length;i+=4){
+            data[i-1]=128;
+        }
+        ctx.globalAlpha=0.1;
+        // putImageData 不受上面全局透明度的影响
+        ctx.putImageData(imgData,0,0,10,0,100,100);
+        ctx.putImageData(imgData,0,110);
+//        ctx.drawImage(backCanvas,100,100,300,300,100,100,100,100);
+//        ctx.drawImage(backCanvas,0,0,200,200,0,0,50,50);
+    });
+
+
+
+
+
+
+</script>
+
+
+</body>
+</html>
+
+

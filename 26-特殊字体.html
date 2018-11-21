@@ -8,31 +8,38 @@
             margin: 0;
             padding: 0; overflow: hidden;}
         canvas{border:1px solid #ddd;}
+
+        @font-face {
+            font-family: 'brush';
+            src: url('font/brush.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: "mn";
+            src:url('font/ripple.ttf') format("truetype");
+        }
+
     </style>
 </head>
 <body>
 
+
 <canvas id="canvas" width="400" height="400"></canvas>
 
 <script>
+
     var canvas=document.getElementById("canvas");
     var ctx=canvas.getContext("2d");
-    ctx.save();
-    ctx.font='normal normal bold 60px verdana';
-    ctx.fillText('hello',100,100);
-    // 计算文本的宽度 在计算之前应该先设置好字形
-    console.log(ctx.measureText('hello').width);
-    ctx.restore();
-
 
     // 左右对齐方式 默认：start    left right center
     ctx.textAlign='center';
     // 上下对齐方式 默认：alphabetic  top,bottom,middle,alphabetic
     ctx.textBaseline='middle';
-    ctx.arc(canvas.width/2,canvas.height/2,10,0,2*Math.PI,false);
     ctx.fill();
-    ctx.fillStyle='#f00';
-    ctx.fillText('居中的文本',canvas.width/2,canvas.height/2);
+    ctx.font='';
+    ctx.fillStyle='#0ff';
+    ctx.font='50px mn';
+    ctx.fillText('hello',canvas.width/2,canvas.height/2);
 
 
 

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        canvas{
+            background-color: #0ff;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="400" height="400"></canvas>
+
+<script>
+
+    var canvas=document.getElementById("canvas");
+    var cxt=canvas.getContext('2d');
+    var circleR=25;
+    
+
+
+
+
+    var n=50,v=1;
+    setInterval(function () {
+        cxt.clearRect(0,0,canvas.width,canvas.height);
+        cxt.save();
+        if(n>=100){
+            v=-1;
+        }else if(n<=2){
+            v=1;
+        }
+
+        n+=v;
+        cxt.beginPath();
+        cxt.arc(canvas.width/2,canvas.height/2,n,0,2*Math.PI,false);
+        cxt.fill();
+        cxt.restore();
+
+    },20);
+
+
+
+
+    
+</script>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0; overflow: hidden;}
+        canvas{border:1px solid #ddd;}
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="400" height="400"></canvas>
+<canvas id="canvas1" width="400" height="400"></canvas>
+<canvas id="canvas2" width="400" height="400"></canvas>
+
+<img src="" alt=""/>
+<script src="js/jquery.js"></script>
+<script src="js/commonUtil.js"></script>
+<script>
+    var canvas=document.getElementById("canvas");
+    var ctx=canvas.getContext("2d");
+
+    var canvas1=document.getElementById("canvas1");
+    var ctx1=canvas1.getContext("2d");
+
+    var canvas2=document.getElementById("canvas2");
+    var ctx2=canvas2.getContext("2d");
+
+    var image=new Image();
+    image.src='images/18.jpg';
+    image.onload= function () {
+        // 这2种写法是改变目标位置和目标大小
+        //指定位置(image,dx,dy)
+        ctx.drawImage(image,0,0);
+        //指定位置和图片大小 (image,dx,dy)，可以对图片进行缩放
+        ctx1.drawImage(image,10,100,50,100);
+
+
+
+        // 这个相当于裁剪原图 前四个值相当于 css里面的background-position定位，
+        //                   后四个值是把前面选择好的区域放在canvas什么位置以什么尺寸，这个根据尺寸也会对图片进行缩放
+        // (image,裁剪原图的x,裁剪原图的y,裁剪原图的宽，裁剪原图的高，开始画的x，开始画的y,开始画的宽，开始画的高)
+        ctx2.drawImage(image,100,10,50,50,100,100,150,150);
+    };
+
+
+
+
+
+
+
+
+
+</script>
+
+
+</body>
+</html>
+
+

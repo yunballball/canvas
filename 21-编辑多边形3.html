@@ -228,6 +228,23 @@ Polygon.prototype = {
     stroke: function () {
 
         context.save();
+
+        // 如果有旋转
+       /* var tx=this.x;
+        var ty=this.y;
+
+
+        context.translate(tx,ty);
+
+        if(this.startAngle){
+            context.rotate(this.startAngle);
+        }
+        this.x=0;
+        this.y=0;*/
+
+
+
+
         context.strokeStyle = this.strokeStyle;
         this.createPath();
         context.stroke();
@@ -235,6 +252,7 @@ Polygon.prototype = {
     },
     fill: function () {
         context.save();
+
         context.fillStyle = this.fillStyle;
         this.createPath();
 

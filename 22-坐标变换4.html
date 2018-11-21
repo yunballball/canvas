@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/global.css"/>
+    <style>
+        canvas{border: 1px solid #333;}
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="400" height="400">
+
+</canvas>
+
+
+<script>
+    var canvas=document.getElementById('canvas');
+    var context=canvas.getContext('2d');
+    context.fillRect(0,0,100,100);
+    var x=0,y=0,k=0;
+    setInterval(function () {
+        if(k%2==0){
+            x+=10;
+            y+=10;
+        }else{
+            x-=10;
+            y-=10;
+        }
+        context.clearRect(0,0,canvas.width,canvas.height);
+        context.fillRect(x,y,100,100);
+        if(x==300 && y==300){
+            k=1;
+        }
+        if(x==0 && y==0){
+            k=0;
+        }
+        console.log('x--'+x+";y--"+y);
+
+
+    },100);
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="`">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0; overflow: hidden;}
+        canvas{border:1px solid #ddd;}
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="400" height="400"></canvas>
+
+<script>
+    var canvas=document.getElementById("canvas");
+    var context=canvas.getContext("2d");
+
+    var fillStyle='#f00',
+        strokeStyle='#00f',
+        textSizee=64;
+
+    circle={
+        x:canvas.width/2,
+        y:canvas.height/2,
+        radius:200
+    };
+
+    function drawCircletext(string,startAngle,endAngle) {
+        var radius=circle.radius,
+            angleDecrement=(startAngle-endAngle)/(string.length- 1),
+            angle=parseFloat(startAngle),
+                index= 0,
+                character;
+        context.save();
+        context.fillStyle=fillStyle;
+        context.strokeStyle=strokeStyle;
+        context.font=textSizee+'px Lucida Sans';
+
+        while(index<string.length){
+            character=string.charAt(index);
+            context.save();
+            context.beginPath();
+
+            context.translate(circle.x+Math.cos(angle)*radius,circle.y-Math.cos(angle)*radius);
+            context.rotate(Math.PI/2-angle);
+            context.fillText(character,0,0,);
+            context.strokeText(character,0,0,);
+            angle-=angleDecrement;
+            index++;
+            context.restore();
+        }
+        context.restore();
+    }
+
+    context.textAlign='center';
+    context.textBaseline='middle';
+
+
+    drawCircletext('hello yunluyunluyunluyunluyunluyunlu',Math.PI*2,Math.PI/8);
+
+
+
+
+
+</script>
+
+
+</body>
+</html>
+
+

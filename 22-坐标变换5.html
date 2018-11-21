@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/global.css"/>
+    <style>
+        canvas{border: 1px solid #333;}
+    </style>
+</head>
+<body>
+
+<canvas id="canvas" width="400" height="400">
+
+</canvas>
+
+
+<script>
+    var canvas=document.getElementById('canvas');
+    var context=canvas.getContext('2d');
+
+    // 平移
+    //context.translate(100,100);
+    // 默认以左上角 旋转
+    //context.rotate(45*Math.PI/180);
+    // 缩放
+//    context.scale(2,2);
+    //context.scale(0.5,0.5);
+
+    var num= 0,num2= 0,value=1;
+
+    context.fillRect(0,0,100,100);
+
+
+    setInterval(function () {
+        context.clearRect(0,0,canvas.width,canvas.height);
+         num++;
+        if(num2==100){
+            value=-1;
+        }else if(num2==0){
+            value=1;
+
+        }
+        num2+=value;
+
+        context.save();
+        // 会累加之前的num 第一次是1， 第二次是1+2。。。
+        context.translate(100,100);
+        context.rotate(num*Math.PI/180);
+        context.scale(num2/50,num2/50);
+        // 仍然绕中心旋转
+        context.translate(-50,-50);
+        context.fillRect(0,0,100,100);
+        context.restore();
+
+
+    },30);
+
+
+
+</script>
+
+</body>
+</html>
