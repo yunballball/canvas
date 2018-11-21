@@ -151,7 +151,7 @@
                 cxt.fillStyle=curDot.color;
 
                 if(curDot.curFrame<curDot.frameCount){
-                     var x=that.linear(curDot.curFrame,,curDot.dx,curDot.sx-curDot.dx,curDot.frameCount);
+                     var x=that.linear(curDot.curFrame,curDot.dx,curDot.sx-curDot.dx,curDot.frameCount);
                     var y=that.linear(curDot.curFrame,curDot.dy,curDot.sy-curDot.dy,curDot.frameCount);
                     cxt.arc(x,y,curDot.radius,0,2*Math.PI,false);
                     curDot.curFrame++;
